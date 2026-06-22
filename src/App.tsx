@@ -1,0 +1,157 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { useState, useEffect } from "react";
+import HUDOverlay from "./components/HUDOverlay";
+import Header from "./components/Header";
+import CustomCursor from "./components/CustomCursor";
+import CharacterSelect from "./components/CharacterSelect";
+import MissionLogs from "./components/MissionLogs";
+import MemoryCores from "./components/MemoryCores";
+import DiagnosticStack from "./components/DiagnosticStack";
+import SignalTerminal from "./components/SignalTerminal";
+import { DEVELOPER_IDENTITY } from "./data";
+import { motion, AnimatePresence } from "motion/react";
+import { Terminal, MapPin, Eye, Cpu } from "lucide-react";
+
+const SECTIONS = [
+  { id: "specialties", name: "ESPECIALIDADES", code: "01" },
+  { id: "projects", name: "MISIONES (PROYECTOS)", code: "02" },
+  { id: "timeline", name: "CRONOLOGÍA REGISTRO", code: "03" },
+  { id: "stack", name: "EQUIPAMIENTO CORE", code: "04" },
+  { id: "contact", name: "SEÑAL COMUNICADOR", code: "05" },
+];
+
+export default function App() {
+  const [activeSection, setActiveSection] = useState("specialties");
+  const [tickerTime, setTickerTime] = useState("");
+
+  // Update dynamic clock in the HUD to simulate live node syncing
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      const timeStr = now.toISOString().replace("T", " // ").substring(0, 22);
+      setTickerTime(timeStr);
+    };
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "specialties":
+        return <CharacterSelect key="specialties" />;
+      case "projects":
+        return <MissionLogs key="projects" />;
+      case "timeline":
+        return <MemoryCores key="timeline" />;
+      case "stack":
+        return <DiagnosticStack key="stack" />;
+      case "contact":
+        return <SignalTerminal key="contact" />;
+      default:
+        return <CharacterSelect key="specialties" />;
+    }
+  };
+
+  return (
+    <HUDOverlay>
+      {/* 1. Futuristic custom targeting cursor */}
+      <CustomCursor />
+
+      {/* 2. Absolute navigation and log markers */}
+      <Header
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        sections={SECTIONS}
+      />
+
+      {/* 3. Hero Identity Dashboard Card */}
+      <section className="mb-6 bg-[#12141C]/50 border border-white/5 rounded-sm p-4 md:p-6 relative overflow-hidden">
+        {/* Abstract scanning elements */}
+        <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-[#00F0FF]/5 to-transparent pointer-events-none" />
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center relative z-10">
+          
+          {/* Identity details (Span 8) */}
+          <div className="md:col-span-8">
+            <div className="flex flex-wrap items-center gap-2.5 font-mono text-[9px] text-white/50 mb-2 uppercase">
+              <span className="flex items-center gap-1">
+                <MapPin size={10} className="text-[#FF0055]" />
+                {DEVELOPER_IDENTITY.location}
+              </span>
+              <span>•</span>
+              <span className="text-[#00F0FF] font-semibold">{DEVELOPER_IDENTITY.status}</span>
+              <span>•</span>
+              <span>NODO_SECURE_AUTH</span>
+            </div>
+
+            <h1 className="font-sans text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-none select-none">
+              {DEVELOPER_IDENTITY.name} <span className="text-[#00F0FF] text-3xl md:text-4xl lg:text-5xl">_</span>
+            </h1>
+            
+            <p className="font-sans text-xs md:text-sm text-white/70 leading-relaxed font-light mt-3 max-w-2xl">
+              {DEVELOPER_IDENTITY.summary}
+            </p>
+          </div>
+
+          {/* Diagnostic Stats Sidebar (Span 4) */}
+          <div className="md:col-span-4 bg-black/40 border border-white/5 p-4 rounded-xs flex flex-col gap-2 font-mono text-[9.5px]">
+            <span className="text-white/30 uppercase tracking-widest block mb-1">PROMPT SYSTEM SPECS</span>
+            {DEVELOPER_IDENTITY.systemSpecs.map((spec, sIdx) => (
+              <div key={sIdx} className="flex justify-between items-center py-1 border-b border-white/5 last:border-0">
+                <span className="text-white/45">{spec.label}</span>
+                <span className="text-[#00F0FF] font-semibold">{spec.value}</span>
+              </div>
+            ))}
+            <div className="flex justify-between items-center py-1 mt-1 font-semibold text-[#FF0055]">
+              <span>SYSTEM_TIME // UTC</span>
+              <span className="animate-pulse">{tickerTime || "SYNCING..."}</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 4. Active Animated Context Screen */}
+      <main className="flex-1 min-h-[450px]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            {renderActiveSection()}
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      {/* 5. Footer and copyright details */}
+      <footer className="border-t border-white/5 mt-12 pt-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-mono text-[9px] text-white/30">
+        <div className="flex items-center gap-1.5 font-light">
+          <Terminal size={11} className="text-[#00F0FF]" />
+          <span>© {new Date().getFullYear()} ANDRES_FRONT_ENGINEER. ALL CHANNELS VERIFIED ENCRYPTED.</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-[#FF0055] hover:underline uppercase select-all">REF: 2EF13A6F</span>
+          <span className="opacity-40">/</span>
+          <span className="flex items-center gap-1">
+            <Eye size={11} />
+            <span>METRIC COMPLIANT VIEW</span>
+          </span>
+        </div>
+      </footer>
+    </HUDOverlay>
+  );
+}
+
