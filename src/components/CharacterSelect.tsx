@@ -189,7 +189,7 @@ export default function CharacterSelect() {
   };
 
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
+    <section id="tour-specialties-container" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
       
       {/* LEFT COLUMN: Character/Specialty Roster Cards */}
       <div className="lg:col-span-4 flex flex-col gap-3">

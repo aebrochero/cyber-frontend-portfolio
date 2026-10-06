@@ -30,3 +30,8 @@ Un portafolio 'About Me' interactivo con estética cyber, bento grids y un siste
    ```bash
    pnpm build
    ```
+
+## Características Destacadas
+
+- **Estética Cyber HUD & Bento Grids**: Interfaz futurista con escaneo láser, cursor interactivo con retícula, y telemetría en tiempo real.
+- **Tour Guiado Interactivo con Driver.js**: Protocolo de recorrido por nodos (`driver.js`) completamente tematizado con la estética HUD cyberpunk para guiar a reclutadores y visitantes por la identidad profesional, especialidades, proyectos de alto impacto, cronología de experiencia y stack técnico.

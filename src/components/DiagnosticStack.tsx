@@ -16,7 +16,7 @@ export default function DiagnosticStack() {
   );
 
   return (
-    <div className="flex flex-col gap-6 mt-4">
+    <div id="tour-stack-container" className="flex flex-col gap-6 mt-4">
       
       {/* Diagnostics Header & Category Filter Buttons */}
       <div className="border-b border-white/5 pb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3">

@@ -36,7 +36,7 @@ export default function MissionLogs() {
   };
 
   return (
-    <div className="flex flex-col gap-6 mt-4">
+    <div id="tour-projects-container" className="flex flex-col gap-6 mt-4">
       
       {/* Search and Filters Hub */}
       <div className="flex flex-col sm:flex-row items-center justify-between border-b border-white/5 pb-4 gap-3">

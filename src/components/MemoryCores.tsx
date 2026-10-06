@@ -9,7 +9,7 @@ import { motion } from "motion/react";
 
 export default function MemoryCores() {
   return (
-    <div className="flex flex-col gap-6 mt-4 max-w-4xl mx-auto w-full">
+    <div id="tour-timeline-container" className="flex flex-col gap-6 mt-4 max-w-4xl mx-auto w-full">
       
       {/* Timeline Header */}
       <div className="border-b border-white/5 pb-4 mb-2 flex flex-col md:flex-row md:items-center justify-between gap-2">

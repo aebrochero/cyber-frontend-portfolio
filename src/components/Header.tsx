@@ -5,21 +5,27 @@
 
 import { useState } from "react";
 import { DEVELOPER_IDENTITY } from "../data";
-import { Menu, X, Radio, Terminal } from "lucide-react";
+import { Menu, X, Radio, Terminal, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface HeaderProps {
   activeSection: string;
   setActiveSection: (section: string) => void;
   sections: { id: string; name: string; code: string }[];
+  onStartTour?: () => void;
 }
 
-export default function Header({ activeSection, setActiveSection, sections }: HeaderProps) {
+export default function Header({
+  activeSection,
+  setActiveSection,
+  sections,
+  onStartTour,
+}: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="relative z-40 border-b border-white/5 pb-4 mb-6 pt-2">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         
         {/* Brand logo & codename */}
         <div className="flex items-center gap-3">
@@ -37,7 +43,7 @@ export default function Header({ activeSection, setActiveSection, sections }: He
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav id="tour-nav-sections" className="hidden lg:flex items-center gap-1">
           {sections.map((sect) => {
             const isActive = activeSection === sect.id;
             return (
@@ -66,8 +72,20 @@ export default function Header({ activeSection, setActiveSection, sections }: He
           })}
         </nav>
 
-        {/* Global Connection / System Ping Status */}
-        <div className="hidden md:flex items-center gap-3 font-mono text-[10px] text-white/40">
+        {/* Global Connection / System Ping Status + Tour Trigger */}
+        <div className="hidden md:flex items-center gap-2.5 font-mono text-[10px] text-white/40">
+          {onStartTour && (
+            <button
+              id="tour-trigger-header"
+              onClick={onStartTour}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#00F0FF]/10 hover:bg-[#00F0FF]/20 border border-[#00F0FF]/40 hover:border-[#00F0FF] rounded-sm text-[#00F0FF] font-mono text-[10px] font-semibold tracking-wider transition-all shadow-[0_0_12px_rgba(0,240,255,0.18)] hover:shadow-[0_0_18px_rgba(0,240,255,0.45)] cursor-pointer group"
+              title="Iniciar Recorrido Guiado con Driver.js"
+            >
+              <Sparkles size={11} className="text-[#00F0FF] group-hover:rotate-12 transition-transform animate-pulse" />
+              <span>TOUR DEL PERFIL</span>
+            </button>
+          )}
+
           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 border border-white/5 rounded-sm">
             <Terminal size={11} className="text-[#00F0FF]" />
             <span className="text-[#00F0FF]/80">{DEVELOPER_IDENTITY.firmware}</span>
@@ -79,12 +97,23 @@ export default function Header({ activeSection, setActiveSection, sections }: He
         </div>
 
         {/* Mobile menu trigger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden flex items-center justify-center p-2 border border-white/10 rounded-sm bg-white/5 hover:bg-white/10 transition-colors text-white"
-        >
-          {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          {onStartTour && (
+            <button
+              onClick={onStartTour}
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-[#00F0FF]/15 border border-[#00F0FF]/50 text-[#00F0FF] rounded-sm font-mono text-[10px] font-bold"
+            >
+              <Sparkles size={11} />
+              <span>TOUR</span>
+            </button>
+          )}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex items-center justify-center p-2 border border-white/10 rounded-sm bg-white/5 hover:bg-white/10 transition-colors text-white"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer Menu */}
@@ -124,6 +153,19 @@ export default function Header({ activeSection, setActiveSection, sections }: He
                   </button>
                 );
               })}
+
+              {onStartTour && (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onStartTour();
+                  }}
+                  className="mt-3 flex items-center justify-center gap-2 w-full py-2.5 px-3 bg-[#00F0FF]/15 border border-[#00F0FF]/60 rounded-xs text-[#00F0FF] font-mono text-xs font-semibold tracking-wider uppercase transition-all shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+                >
+                  <Sparkles size={13} />
+                  <span>INICIAR TOUR GUIADO</span>
+                </button>
+              )}
             </div>
             
             <div className="border-t border-white/5 mt-4 pt-4 flex items-center justify-between">

@@ -19,7 +19,8 @@ import DiagnosticStack from "./components/DiagnosticStack";
 import SignalTerminal from "./components/SignalTerminal";
 import { DEVELOPER_IDENTITY } from "./data";
 import { motion, AnimatePresence } from "motion/react";
-import { Terminal, MapPin, Eye, Cpu } from "lucide-react";
+import { Terminal, MapPin, Eye, Cpu, Sparkles } from "lucide-react";
+import { useProfileTour } from "./tour/useProfileTour";
 
 const SECTIONS = [
   { id: "specialties", name: "ESPECIALIDADES", code: "01" },
@@ -32,6 +33,7 @@ const SECTIONS = [
 export default function App() {
   const [activeSection, setActiveSection] = useState("specialties");
   const [tickerTime, setTickerTime] = useState("");
+  const { startTour } = useProfileTour(activeSection, setActiveSection);
 
   // Update dynamic clock in the HUD to simulate live node syncing
   useEffect(() => {
@@ -72,10 +74,14 @@ export default function App() {
         activeSection={activeSection}
         setActiveSection={setActiveSection}
         sections={SECTIONS}
+        onStartTour={startTour}
       />
 
       {/* 3. Hero Identity Dashboard Card */}
-      <section className="mb-6 bg-[#12141C]/50 border border-white/5 rounded-sm p-4 md:p-6 relative overflow-hidden">
+      <section
+        id="tour-hero-identity"
+        className="mb-6 bg-[#12141C]/50 border border-white/5 rounded-sm p-4 md:p-6 relative overflow-hidden"
+      >
         {/* Abstract scanning elements */}
         <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-[#00F0FF]/5 to-transparent pointer-events-none" />
 
@@ -101,10 +107,28 @@ export default function App() {
             <p className="font-sans text-xs md:text-sm text-white/70 leading-relaxed font-light mt-3 max-w-2xl">
               {DEVELOPER_IDENTITY.summary}
             </p>
+
+            {/* Quick Tour Launcher Action */}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button
+                id="tour-hero-cta"
+                onClick={startTour}
+                className="inline-flex items-center gap-2 px-3.5 py-2 bg-[#00F0FF]/15 hover:bg-[#00F0FF]/25 border border-[#00F0FF]/70 hover:border-[#00F0FF] text-[#00F0FF] font-mono text-[10.5px] font-bold tracking-widest uppercase rounded-xs transition-all shadow-[0_0_14px_rgba(0,240,255,0.2)] hover:shadow-[0_0_22px_rgba(0,240,255,0.5)] cursor-pointer group"
+              >
+                <Sparkles size={12} className="group-hover:rotate-45 transition-transform animate-pulse" />
+                <span>INICIAR TOUR GUIADO // PROTOCOLO SYS</span>
+              </button>
+              <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">
+                [DRIVER.JS INTERACTIVE WALKTHROUGH]
+              </span>
+            </div>
           </div>
 
           {/* Diagnostic Stats Sidebar (Span 4) */}
-          <div className="md:col-span-4 bg-black/40 border border-white/5 p-4 rounded-xs flex flex-col gap-2 font-mono text-[9.5px]">
+          <div
+            id="tour-hero-specs"
+            className="md:col-span-4 bg-black/40 border border-white/5 p-4 rounded-xs flex flex-col gap-2 font-mono text-[9.5px]"
+          >
             <span className="text-white/30 uppercase tracking-widest block mb-1">PROMPT SYSTEM SPECS</span>
             {DEVELOPER_IDENTITY.systemSpecs.map((spec, sIdx) => (
               <div key={sIdx} className="flex justify-between items-center py-1 border-b border-white/5 last:border-0">
