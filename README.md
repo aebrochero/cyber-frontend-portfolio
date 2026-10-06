@@ -2,19 +2,31 @@
 <img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
 </div>
 
-# Run and deploy your AI Studio app
+# Andrés - Cyber Frontend Portfolio
 
-This contains everything you need to run your app locally.
+Un portafolio 'About Me' interactivo con estética cyber, bento grids y un sistema HUD premium.
 
-View your app in AI Studio: https://ai.studio/apps/2ef13a6f-8411-44a5-bd04-5c82f46c861b
+## Ejecución Local
 
-## Run Locally
+**Prerrequisitos:** Node.js (v18+) y [pnpm](https://pnpm.io/) (`corepack enable` o `pnpm`).
 
-**Prerequisites:**  Node.js
+1. Instalar dependencias:
+   ```bash
+   pnpm install
+   ```
 
+2. Configurar variables de entorno (opcional si se requiere integración GenAI):
+   Crea `.env.local` y define `GEMINI_API_KEY`:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+3. Iniciar el servidor de desarrollo:
+   ```bash
+   pnpm dev
+   ```
+
+4. Compilar para producción:
+   ```bash
+   pnpm build
+   ```
