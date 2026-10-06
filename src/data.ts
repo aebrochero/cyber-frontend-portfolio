@@ -5,18 +5,6 @@
 
 import { Specialization, Project, Experience, SkillCategory } from "./types";
 
-export const CUSTOM_THEME = {
-  bg: "#08090C", // Obsidian black matching tbhx
-  grid: "rgba(255, 255, 255, 0.04)",
-  colors: {
-    primary: "#00F0FF", // Electric Cyan
-    secondary: "#FF0055", // Neon Crimson / Red
-    accent: "#FFD700", // Amber Gold
-    muted: "#6B7280", // Slate Gray
-    panel: "#12141C", // Dark panel color
-  }
-};
-
 export const DEVELOPER_IDENTITY = {
   name: "ANDRÉS",
   title: "FRONTEND ENGINEER / INTERACTIVE CREATIVE",

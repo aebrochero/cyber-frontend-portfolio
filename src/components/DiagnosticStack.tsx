@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { SKILLS_DIAGNOSTICS } from "../data";
-import { Cpu, Terminal, LayoutGrid, CheckCircle } from "lucide-react";
+import { Cpu } from "lucide-react";
 import { motion } from "motion/react";
 
 export default function DiagnosticStack() {

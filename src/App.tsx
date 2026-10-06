@@ -3,12 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, ComponentType } from "react";
 import HUDOverlay from "./components/HUDOverlay";
 import Header from "./components/Header";
 import CustomCursor from "./components/CustomCursor";
@@ -19,7 +14,7 @@ import DiagnosticStack from "./components/DiagnosticStack";
 import SignalTerminal from "./components/SignalTerminal";
 import { DEVELOPER_IDENTITY } from "./data";
 import { motion, AnimatePresence } from "motion/react";
-import { Terminal, MapPin, Eye, Cpu, Sparkles } from "lucide-react";
+import { Terminal, MapPin, Eye, Sparkles } from "lucide-react";
 import { useProfileTour } from "./tour/useProfileTour";
 
 const SECTIONS = [
@@ -29,6 +24,14 @@ const SECTIONS = [
   { id: "stack", name: "EQUIPAMIENTO CORE", code: "04" },
   { id: "contact", name: "SEÑAL COMUNICADOR", code: "05" },
 ];
+
+const SECTION_COMPONENTS: Record<string, ComponentType> = {
+  specialties: CharacterSelect,
+  projects: MissionLogs,
+  timeline: MemoryCores,
+  stack: DiagnosticStack,
+  contact: SignalTerminal,
+};
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("specialties");
@@ -47,22 +50,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const renderActiveSection = () => {
-    switch (activeSection) {
-      case "specialties":
-        return <CharacterSelect key="specialties" />;
-      case "projects":
-        return <MissionLogs key="projects" />;
-      case "timeline":
-        return <MemoryCores key="timeline" />;
-      case "stack":
-        return <DiagnosticStack key="stack" />;
-      case "contact":
-        return <SignalTerminal key="contact" />;
-      default:
-        return <CharacterSelect key="specialties" />;
-    }
-  };
+  const ActiveComponent = SECTION_COMPONENTS[activeSection] || CharacterSelect;
 
   return (
     <HUDOverlay>
@@ -153,9 +141,8 @@ export default function App() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
           >
-            {renderActiveSection()}
+            <ActiveComponent />
           </motion.div>
         </AnimatePresence>
       </main>

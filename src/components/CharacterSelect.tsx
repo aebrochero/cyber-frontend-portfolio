@@ -5,8 +5,7 @@
 
 import { useState } from "react";
 import { SPECIALIZATIONS } from "../data";
-import { Specialization } from "../types";
-import { Shield, Sparkles, Cpu, Layers } from "lucide-react";
+import { Shield, Sparkles, Layers } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function CharacterSelect() {

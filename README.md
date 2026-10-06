@@ -15,18 +15,12 @@ Un portafolio 'About Me' interactivo con estética cyber, bento grids y un siste
    pnpm install
    ```
 
-2. Configurar variables de entorno (opcional si se requiere integración GenAI):
-   Crea `.env.local` y define `GEMINI_API_KEY`:
-   ```bash
-   cp .env.example .env.local
-   ```
-
-3. Iniciar el servidor de desarrollo:
+2. Iniciar el servidor de desarrollo:
    ```bash
    pnpm dev
    ```
 
-4. Compilar para producción:
+3. Compilar para producción:
    ```bash
    pnpm build
    ```

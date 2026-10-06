@@ -6,7 +6,7 @@
 import { useState } from "react";
 import { PROJECTS } from "../data";
 import { Project } from "../types";
-import { ExternalLink, Database, AlertCircle, CheckCircle, Flame } from "lucide-react";
+import { ExternalLink, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function MissionLogs() {

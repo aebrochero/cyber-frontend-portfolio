@@ -7,18 +7,7 @@ import { useRef, useCallback } from "react";
 import { driver, Driver, DriveStep } from "driver.js";
 import "./driver-theme.css";
 
-export interface TourStepDefinition extends DriveStep {
-  sectionId?: string;
-}
-
-export const TOUR_STEPS_METADATA: {
-  element: string;
-  sectionId: string;
-  title: string;
-  description: string;
-  side: "top" | "bottom" | "left" | "right";
-  align: "start" | "center" | "end";
-}[] = [
+const TOUR_STEPS_METADATA = [
   {
     element: "#tour-hero-identity",
     sectionId: "specialties",
@@ -91,7 +80,7 @@ export const TOUR_STEPS_METADATA: {
     side: "top",
     align: "center",
   },
-];
+] as const;
 
 export function useProfileTour(
   activeSection: string,
@@ -188,6 +177,5 @@ export function useProfileTour(
 
   return {
     startTour,
-    isTourActive: () => driverInstanceRef.current?.isActive() ?? false,
   };
 }

@@ -4,7 +4,7 @@
  */
 
 import { EXPERIENCE_TIMELINE } from "../data";
-import { Briefcase, MapPin, Calendar, Terminal } from "lucide-react";
+import { MapPin, Calendar, Terminal } from "lucide-react";
 import { motion } from "motion/react";
 
 export default function MemoryCores() {
