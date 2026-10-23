@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import LandingHub, { PortfolioThemeKey } from './components/LandingHub';
-import CyberPortfolio from './App';
-import CozyPortfolio from './themes/cozy/CozyPortfolio';
-import VaporwavePortfolio from './themes/vaporwave/VaporwavePortfolio';
-import MinimalPortfolio from './themes/minimal/MinimalPortfolio';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, Loader2 } from 'lucide-react';
 import { useLanguage } from './context/LanguageContext';
+
+const CyberPortfolio = lazy(() => import('./App'));
+const CozyPortfolio = lazy(() => import('./themes/cozy/CozyPortfolio'));
+const VaporwavePortfolio = lazy(() => import('./themes/vaporwave/VaporwavePortfolio'));
+const MinimalPortfolio = lazy(() => import('./themes/minimal/MinimalPortfolio'));
 
 export default function RootApp() {
   const [currentView, setCurrentView] = useState<'landing' | PortfolioThemeKey>(() => {
@@ -81,11 +82,22 @@ export default function RootApp() {
         </aside>
       )}
 
-      {currentView === 'landing' && <LandingHub onSelectTheme={handleSelectTheme} />}
-      {currentView === 'cyber' && <CyberPortfolio />}
-      {currentView === 'cozy' && <CozyPortfolio />}
-      {currentView === 'vaporwave' && <VaporwavePortfolio />}
-      {currentView === 'minimal' && <MinimalPortfolio />}
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-[#07080B] flex flex-col items-center justify-center text-white font-mono gap-3">
+            <Loader2 size={24} className="animate-spin text-[#00F0FF]" />
+            <span className="text-xs tracking-widest uppercase text-white/60">
+              {lang === 'es' ? 'CARGANDO ESTILO...' : 'LOADING THEME...'}
+            </span>
+          </div>
+        }
+      >
+        {currentView === 'landing' && <LandingHub onSelectTheme={handleSelectTheme} />}
+        {currentView === 'cyber' && <CyberPortfolio />}
+        {currentView === 'cozy' && <CozyPortfolio />}
+        {currentView === 'vaporwave' && <VaporwavePortfolio />}
+        {currentView === 'minimal' && <MinimalPortfolio />}
+      </Suspense>
     </div>
   );
 }
