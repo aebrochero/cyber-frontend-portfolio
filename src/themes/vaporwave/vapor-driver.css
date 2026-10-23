@@ -1,0 +1,130 @@
+/* ==========================================================================
+   VAPORWAVE / RETRO ARCADE THEME FOR DRIVER.JS
+   ========================================================================== */
+
+.driver-popover.vapor-popover {
+  all: unset;
+  box-sizing: border-box !important;
+  display: block !important;
+  position: fixed !important;
+  background: rgba(18, 4, 32, 0.95) !important;
+  border: 2px solid #FF007F !important;
+  border-radius: 4px !important;
+  color: #FFFFFF !important;
+  font-family: var(--font-mono, monospace) !important;
+  padding: 18px 20px !important;
+  min-width: 300px !important;
+  max-width: 420px !important;
+  z-index: 1000000000 !important;
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.4), inset 0 0 15px rgba(0, 240, 255, 0.15) !important;
+  animation: vapor-pop-in 0.2s steps(4) !important;
+}
+
+@keyframes vapor-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.vapor-popover .driver-popover-title {
+  all: unset;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  color: #00F0FF !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  border-bottom: 1px dashed rgba(255, 0, 127, 0.4) !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+  text-shadow: 0 0 8px #00F0FF !important;
+}
+
+.vapor-popover .driver-popover-close-btn {
+  all: unset;
+  cursor: pointer !important;
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  color: #FF007F !important;
+  border: 1px solid #FF007F !important;
+  background: rgba(255, 0, 127, 0.1) !important;
+}
+
+.vapor-popover .driver-popover-close-btn:hover {
+  background: #FF007F !important;
+  color: #000000 !important;
+}
+
+.vapor-popover .driver-popover-description {
+  all: unset;
+  display: block !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 11.5px !important;
+  line-height: 1.6 !important;
+  color: #E2D9F3 !important;
+  margin-bottom: 6px !important;
+}
+
+.vapor-popover .driver-popover-footer {
+  all: unset;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-top: 14px !important;
+  padding-top: 10px !important;
+  border-top: 1px dashed rgba(255, 0, 127, 0.4) !important;
+}
+
+.vapor-popover .driver-popover-progress-text {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: #FFE600 !important;
+  background: rgba(255, 230, 0, 0.1) !important;
+  border: 1px solid rgba(255, 230, 0, 0.3) !important;
+  padding: 3px 8px !important;
+}
+
+.vapor-popover .driver-popover-navigation-btns {
+  display: flex !important;
+  gap: 8px !important;
+}
+
+.vapor-popover .driver-popover-footer-btn {
+  all: unset;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  padding: 5px 12px !important;
+  border: 1px solid !important;
+}
+
+.vapor-popover .driver-popover-prev-btn {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.vapor-popover .driver-popover-next-btn {
+  border-color: #00F0FF !important;
+  color: #000000 !important;
+  background: #00F0FF !important;
+  box-shadow: 0 0 10px #00F0FF !important;
+}
