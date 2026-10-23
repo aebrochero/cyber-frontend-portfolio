@@ -26,11 +26,13 @@ import {
   Radio,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { STYLE_DICTIONARIES } from '@/data/styleLabels';
 import { driver, DriveStep } from 'driver.js';
 import './vapor-driver.css';
 
 export default function VaporwavePortfolio() {
   const { lang, toggleLang, dict } = useLanguage();
+  const vaporText = STYLE_DICTIONARIES.vaporwave[lang];
   const [activeTab, setActiveTab] = useState<'specialties' | 'projects' | 'experience' | 'stack' | 'contact'>('specialties');
   const [selectedSpecId, setSelectedSpecId] = useState(dict.specializations[0].id);
   const [projectFilter, setProjectFilter] = useState<'ALL' | 'ACTIVE' | 'COMPLETED'>('ALL');
@@ -57,17 +59,43 @@ export default function VaporwavePortfolio() {
   };
 
   const startVaporTour = () => {
-    const steps: DriveStep[] = dict.tourSteps.map((s) => ({
-      element: s.element,
-      waitForElement: 2500,
-      popover: {
-        title: `★ ${s.title} ★`,
-        description: s.description,
-        side: s.side,
-        align: s.align,
-        popoverClass: 'vapor-popover',
-      },
-    }));
+    const tourOverrides = vaporText.tourStepOverrides;
+
+    const steps: DriveStep[] = dict.tourSteps.map((s) => {
+      let title = `★ ${s.title} ★`;
+      let desc = s.description;
+
+      if (tourOverrides) {
+        if (s.sectionId === 'specialties' && s.element === '#tour-specialties-container') {
+          title = `★ ${tourOverrides.specialtiesTitle} ★`;
+          desc = tourOverrides.specialtiesDesc;
+        } else if (s.sectionId === 'projects') {
+          title = `★ ${tourOverrides.projectsTitle} ★`;
+          desc = tourOverrides.projectsDesc;
+        } else if (s.sectionId === 'timeline') {
+          title = `★ ${tourOverrides.timelineTitle} ★`;
+          desc = tourOverrides.timelineDesc;
+        } else if (s.sectionId === 'stack') {
+          title = `★ ${tourOverrides.stackTitle} ★`;
+          desc = tourOverrides.stackDesc;
+        } else if (s.sectionId === 'contact') {
+          title = `★ ${tourOverrides.contactTitle} ★`;
+          desc = tourOverrides.contactDesc;
+        }
+      }
+
+      return {
+        element: s.element,
+        waitForElement: 2500,
+        popover: {
+          title,
+          description: desc,
+          side: s.side,
+          align: s.align,
+          popoverClass: 'vapor-popover',
+        },
+      };
+    });
 
     const d = driver({
       animate: true,
@@ -145,7 +173,7 @@ export default function VaporwavePortfolio() {
               className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-[#FF007F] to-[#9900FF] hover:from-[#FF1A8C] hover:to-[#B31AFF] text-white text-xs font-black tracking-widest uppercase border border-white/20 shadow-[0_0_15px_rgba(255,0,127,0.5)] transition-all cursor-pointer"
             >
               <Sparkles size={13} />
-              <span className="hidden sm:inline">{dict.nav.tourBtn}</span>
+              <span className="hidden sm:inline">{vaporText.nav.tourBtn}</span>
             </button>
           </div>
         </div>
@@ -169,10 +197,10 @@ export default function VaporwavePortfolio() {
               <div className="flex flex-wrap items-center gap-2 text-xs font-bold mb-3">
                 <span className="px-2 py-0.5 bg-[#FF007F]/20 border border-[#FF007F] text-[#FF007F]">
                   <MapPin size={11} className="inline mr-1" />
-                  {dict.identity.location}
+                  {vaporText.hero.locationNote}
                 </span>
                 <span className="px-2 py-0.5 bg-[#00F0FF]/20 border border-[#00F0FF] text-[#00F0FF]">
-                  {dict.identity.availability}
+                  {vaporText.hero.badge}
                 </span>
               </div>
 
@@ -200,7 +228,7 @@ export default function VaporwavePortfolio() {
                   className="px-5 py-2.5 bg-[#00F0FF] hover:bg-[#33F3FF] text-[#0A0314] font-black text-xs uppercase tracking-widest shadow-[0_0_15px_#00F0FF] transition-all cursor-pointer flex items-center gap-2"
                 >
                   <Sparkles size={14} />
-                  <span>{dict.hero.startTour}</span>
+                  <span>{vaporText.hero.startTour}</span>
                 </button>
                 <a
                   href={`mailto:${dict.identity.contacts.primaryEmail}`}
@@ -218,7 +246,7 @@ export default function VaporwavePortfolio() {
               className="lg:col-span-4 bg-[#1A0833] border border-[#00F0FF]/40 p-4 rounded-xs shadow-[0_0_15px_rgba(0,240,255,0.15)] flex flex-col gap-2.5 text-xs"
             >
               <span className="text-[#FFE600] font-black tracking-widest border-b border-[#FFE600]/30 pb-1 flex items-center justify-between">
-                <span>[HIGH SCORE SPECS]</span>
+                <span>[{vaporText.hero.specsTitle}]</span>
                 <Radio size={12} className="text-[#FF007F] animate-pulse" />
               </span>
 
@@ -244,11 +272,11 @@ export default function VaporwavePortfolio() {
           className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 border-b-2 border-[#FF007F]/30"
         >
           {[
-            { id: 'specialties', label: 'STAGE 1 // ' + dict.nav.specialties, icon: Layers },
-            { id: 'projects', label: 'STAGE 2 // ' + dict.nav.projects, icon: Briefcase },
-            { id: 'experience', label: 'STAGE 3 // ' + dict.nav.timeline, icon: Calendar },
-            { id: 'stack', label: 'STAGE 4 // ' + dict.nav.stack, icon: Cpu },
-            { id: 'contact', label: 'STAGE 5 // ' + dict.nav.contact, icon: Send },
+            { id: 'specialties', label: vaporText.nav.specialties, icon: Layers },
+            { id: 'projects', label: vaporText.nav.projects, icon: Briefcase },
+            { id: 'experience', label: vaporText.nav.timeline, icon: Calendar },
+            { id: 'stack', label: vaporText.nav.stack, icon: Cpu },
+            { id: 'contact', label: vaporText.nav.contact, icon: Send },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -274,7 +302,7 @@ export default function VaporwavePortfolio() {
           <section id="tour-specialties-container" className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-4 flex flex-col gap-3">
               <span className="text-xs font-black text-[#FFE600] tracking-widest uppercase">
-                &gt;&gt; SELECT CHARACTER ROLE
+                &gt;&gt; {vaporText.specialties.rosterTitle}
               </span>
               {dict.specializations.map((spec) => {
                 const isSelected = spec.id === activeSpec.id;
@@ -315,28 +343,33 @@ export default function VaporwavePortfolio() {
               <p className="text-xs text-[#E2D9F3] leading-relaxed mb-6 font-light">{activeSpec.bio}</p>
 
               {/* Stats Bar */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                {activeSpec.stats.map((st, sIdx) => (
-                  <div key={sIdx} className="bg-[#1A0833] p-3 border border-white/10">
-                    <div className="flex justify-between items-baseline text-xs mb-1">
-                      <span className="font-bold text-white">{st.name}</span>
-                      <span className="text-[#FFE600] font-black">{st.value}%</span>
+              <div className="mb-6">
+                <span className="text-xs font-black text-[#FFE600] uppercase tracking-widest block mb-3">
+                  // {vaporText.specialties.statsTitle}
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {activeSpec.stats.map((st, sIdx) => (
+                    <div key={sIdx} className="bg-[#1A0833] p-3 border border-white/10">
+                      <div className="flex justify-between items-baseline text-xs mb-1">
+                        <span className="font-bold text-white">{st.name}</span>
+                        <span className="text-[#FFE600] font-black">{st.value}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-black/60 border border-white/20">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#FF007F] via-[#FFE600] to-[#00F0FF]"
+                          style={{ width: `${st.value}%` }}
+                        />
+                      </div>
+                      <span className="text-[10px] text-white/50 block mt-1">{st.desc}</span>
                     </div>
-                    <div className="h-2 w-full bg-black/60 border border-white/20">
-                      <div
-                        className="h-full bg-gradient-to-r from-[#FF007F] via-[#FFE600] to-[#00F0FF]"
-                        style={{ width: `${st.value}%` }}
-                      />
-                    </div>
-                    <span className="text-[10px] text-white/50 block mt-1">{st.desc}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               {/* Capabilities */}
               <div className="pt-4 border-t border-white/10">
                 <h4 className="text-xs font-black text-[#00F0FF] uppercase tracking-widest mb-3">
-                  // {dict.specialties.skillsTitle}
+                  // {vaporText.specialties.capabilitiesTitle}
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {activeSpec.capabilities.map((cap, cIdx) => (
@@ -357,9 +390,9 @@ export default function VaporwavePortfolio() {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <span className="text-xs font-bold text-[#FF007F] tracking-widest uppercase">
-                  {dict.projects.tag}
+                  {vaporText.projects.sectionTag}
                 </span>
-                <h3 className="text-xl font-black text-white">{dict.projects.title}</h3>
+                <h3 className="text-xl font-black text-white">{vaporText.projects.sectionTitle}</h3>
               </div>
 
               <div className="flex items-center gap-1 bg-[#120524] p-1 border border-white/20">
@@ -442,7 +475,7 @@ export default function VaporwavePortfolio() {
                             className="overflow-hidden pt-3 border-t border-white/10"
                           >
                             <h5 className="text-[10px] font-bold text-[#FFE600] uppercase mb-2">
-                              {dict.projects.outcomesTitle}
+                              {vaporText.projects.outcomesTitle}
                             </h5>
                             <div className="space-y-1.5">
                               {p.outcomes.map((out, oIdx) => (
@@ -462,7 +495,7 @@ export default function VaporwavePortfolio() {
                         onClick={() => setExpandedProjId(isExpanded ? null : p.id)}
                         className="text-[#FFE600] hover:underline font-bold cursor-pointer"
                       >
-                        {isExpanded ? dict.projects.collapseBtn : dict.projects.expandBtn}
+                        {isExpanded ? vaporText.projects.collapseBtn : vaporText.projects.expandBtn}
                       </button>
 
                       {p.url && (
@@ -473,7 +506,7 @@ export default function VaporwavePortfolio() {
                           className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#00F0FF]/15 border border-[#00F0FF] text-[#00F0FF] font-bold hover:bg-[#00F0FF] hover:text-black transition-all"
                         >
                           <Code2 size={12} />
-                          <span>REPO</span>
+                          <span>{vaporText.projects.repoBtn}</span>
                           <ExternalLink size={10} />
                         </a>
                       )}
@@ -490,9 +523,9 @@ export default function VaporwavePortfolio() {
           <section id="tour-timeline-container" className="max-w-3xl mx-auto flex flex-col gap-6">
             <div className="text-center mb-2">
               <span className="text-xs font-bold text-[#FF007F] tracking-widest uppercase">
-                {dict.timeline.tag}
+                {vaporText.timeline.sectionTag}
               </span>
-              <h3 className="text-2xl font-black text-white">{dict.timeline.title}</h3>
+              <h3 className="text-2xl font-black text-white">{vaporText.timeline.sectionTitle}</h3>
             </div>
 
             <div className="relative pl-6 border-l-2 border-[#FF007F]/40 space-y-6">
@@ -515,7 +548,7 @@ export default function VaporwavePortfolio() {
 
                     <div className="pt-3 border-t border-white/10 space-y-1.5">
                       <span className="text-[10px] font-bold text-[#FF007F] uppercase tracking-wider block mb-2">
-                        {dict.timeline.outcomesTitle}
+                        {vaporText.timeline.achievementsTitle}
                       </span>
                       {exp.achievements.map((ach, aIdx) => (
                         <div key={aIdx} className="flex items-start gap-2 text-xs text-white/70">
@@ -536,9 +569,9 @@ export default function VaporwavePortfolio() {
           <section id="tour-stack-container" className="flex flex-col gap-6">
             <div className="text-center max-w-xl mx-auto mb-2">
               <span className="text-xs font-bold text-[#FFE600] tracking-widest uppercase">
-                {dict.stack.tag}
+                {vaporText.stack.sectionTag}
               </span>
-              <h3 className="text-2xl font-black text-white">{dict.stack.title}</h3>
+              <h3 className="text-2xl font-black text-white">{vaporText.stack.sectionTitle}</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -580,10 +613,10 @@ export default function VaporwavePortfolio() {
             <div className="lg:col-span-5 bg-[#120524]/90 border border-[#FF007F]/40 p-6 rounded-xs space-y-4">
               <div>
                 <span className="text-xs font-bold text-[#FFE600] uppercase tracking-widest block mb-1">
-                  {dict.contact.tag}
+                  {vaporText.contact.sectionTag}
                 </span>
-                <h3 className="text-xl font-black text-white">{dict.contact.title}</h3>
-                <p className="text-xs text-white/70 leading-relaxed mt-2">{dict.contact.description}</p>
+                <h3 className="text-xl font-black text-white">{vaporText.contact.sectionTitle}</h3>
+                <p className="text-xs text-white/70 leading-relaxed mt-2">{vaporText.contact.sectionDesc}</p>
               </div>
 
               <div className="space-y-2.5 pt-2 text-xs">
@@ -646,15 +679,15 @@ export default function VaporwavePortfolio() {
                   <div className="w-12 h-12 bg-[#00F0FF]/20 border border-[#00F0FF] text-[#00F0FF] flex items-center justify-center mx-auto mb-3">
                     <CheckCircle size={24} />
                   </div>
-                  <h5 className="font-bold text-sm text-white">{dict.contact.successTitle}</h5>
+                  <h5 className="font-bold text-sm text-white">{vaporText.contact.successTitle}</h5>
                   <p className="text-xs text-white/70 max-w-sm mx-auto mt-1 mb-4">
-                    {dict.contact.successDesc}
+                    {vaporText.contact.successDesc}
                   </p>
                   <button
                     onClick={() => setFormSent(false)}
                     className="px-4 py-2 bg-[#FF007F] text-white text-xs font-bold uppercase cursor-pointer"
                   >
-                    {dict.contact.btnNewSignal}
+                    {vaporText.contact.btnNew}
                   </button>
                 </div>
               ) : (
@@ -700,12 +733,12 @@ export default function VaporwavePortfolio() {
                     {formLoading ? (
                       <>
                         <Loader2 size={14} className="animate-spin" />
-                        <span>{dict.contact.btnCompiling}</span>
+                        <span>{vaporText.contact.btnSending}</span>
                       </>
                     ) : (
                       <>
                         <Send size={13} />
-                        <span>{dict.contact.btnSubmit}</span>
+                        <span>{vaporText.contact.btnSubmit}</span>
                       </>
                     )}
                   </button>

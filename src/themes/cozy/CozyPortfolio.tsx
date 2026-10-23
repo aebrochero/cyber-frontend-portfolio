@@ -18,18 +18,20 @@ import {
   Layers,
   CheckCircle,
   Briefcase,
-  Terminal,
   Send,
   Loader2,
   Calendar,
   Lock,
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { STYLE_DICTIONARIES } from '@/data/styleLabels';
 import { driver, DriveStep } from 'driver.js';
 import './cozy-driver.css';
 
 export default function CozyPortfolio() {
   const { lang, toggleLang, dict } = useLanguage();
+  const cozyText = STYLE_DICTIONARIES.cozy[lang];
+
   const [activeTab, setActiveTab] = useState<'specialties' | 'projects' | 'experience' | 'stack' | 'contact'>('specialties');
   const [selectedSpecId, setSelectedSpecId] = useState(dict.specializations[0].id);
   const [projectFilter, setProjectFilter] = useState<'ALL' | 'ACTIVE' | 'COMPLETED'>('ALL');
@@ -56,17 +58,43 @@ export default function CozyPortfolio() {
   };
 
   const startCozyTour = () => {
-    const steps: DriveStep[] = dict.tourSteps.map((s) => ({
-      element: s.element,
-      waitForElement: 2500,
-      popover: {
-        title: s.title,
-        description: s.description,
-        side: s.side,
-        align: s.align,
-        popoverClass: 'cozy-popover',
-      },
-    }));
+    const tourOverrides = cozyText.tourStepOverrides;
+
+    const steps: DriveStep[] = dict.tourSteps.map((s) => {
+      let title = s.title;
+      let desc = s.description;
+
+      if (tourOverrides) {
+        if (s.sectionId === 'specialties' && s.element === '#tour-specialties-container') {
+          title = tourOverrides.specialtiesTitle;
+          desc = tourOverrides.specialtiesDesc;
+        } else if (s.sectionId === 'projects') {
+          title = tourOverrides.projectsTitle;
+          desc = tourOverrides.projectsDesc;
+        } else if (s.sectionId === 'timeline') {
+          title = tourOverrides.timelineTitle;
+          desc = tourOverrides.timelineDesc;
+        } else if (s.sectionId === 'stack') {
+          title = tourOverrides.stackTitle;
+          desc = tourOverrides.stackDesc;
+        } else if (s.sectionId === 'contact') {
+          title = tourOverrides.contactTitle;
+          desc = tourOverrides.contactDesc;
+        }
+      }
+
+      return {
+        element: s.element,
+        waitForElement: 2500,
+        popover: {
+          title,
+          description: desc,
+          side: s.side,
+          align: s.align,
+          popoverClass: 'cozy-popover',
+        },
+      };
+    });
 
     const d = driver({
       animate: true,
@@ -98,7 +126,7 @@ export default function CozyPortfolio() {
               <h1 className="font-bold text-base text-[#2B2D42] tracking-tight">
                 {dict.identity.name}
               </h1>
-              <span className="text-xs text-[#8D99AE] flex items-center gap-1 font-medium">
+              <span className="text-xs text-[#8D99AE] flex items-center gap-1.5 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 {dict.identity.roleTitle}
               </span>
@@ -122,7 +150,7 @@ export default function CozyPortfolio() {
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#E07A5F] hover:bg-[#C86348] text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
             >
               <Sparkles size={13} />
-              <span className="hidden sm:inline">{dict.nav.tourBtn}</span>
+              <span className="hidden sm:inline">{cozyText.nav.tourBtn}</span>
             </button>
           </div>
         </div>
@@ -139,18 +167,22 @@ export default function CozyPortfolio() {
             {/* Text column */}
             <div className="lg:col-span-8">
               <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#8D99AE] mb-3">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#F4F1DE] text-[#3D405B]">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#F4F1DE] text-[#3D405B]">
                   <MapPin size={12} className="text-[#E07A5F]" />
-                  {dict.identity.location}
+                  {cozyText.hero.locationNote}
                 </span>
-                <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  {dict.identity.availability}
+                <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  {cozyText.hero.badge}
                 </span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2B2D42] tracking-tight leading-tight mb-3">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2B2D42] tracking-tight leading-tight mb-2">
                 {dict.identity.name}
               </h2>
+
+              <p className="text-xs font-bold uppercase tracking-wider text-[#E07A5F] mb-3">
+                {dict.identity.roleTitle}
+              </p>
 
               <p className="text-sm sm:text-base text-[#4A4E69] leading-relaxed font-normal max-w-2xl mb-5">
                 {dict.identity.summary}
@@ -168,7 +200,7 @@ export default function CozyPortfolio() {
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#E07A5F] hover:bg-[#C86348] text-white font-medium text-sm shadow-md transition-all cursor-pointer"
                 >
                   <Sparkles size={16} />
-                  <span>{dict.hero.startTour}</span>
+                  <span>{cozyText.hero.startTour}</span>
                 </button>
                 <a
                   href={`mailto:${dict.identity.contacts.primaryEmail}`}
@@ -190,12 +222,12 @@ export default function CozyPortfolio() {
                 alt="Cozy workspace"
                 className="w-full h-full object-cover filter contrast-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-                <span className="text-[11px] font-mono tracking-widest text-[#F4F1DE] uppercase">
-                  Pereira, Risaralda // Colombia
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4 text-white">
+                <span className="text-xs font-semibold text-[#F4F1DE]">
+                  {cozyText.hero.locationNote}
                 </span>
-                <span className="text-xs font-semibold">
-                  SENA & UTP Engineering Hub
+                <span className="text-[11px] text-white/80 font-medium">
+                  {cozyText.hero.specsTitle} · SENA & UTP Hub
                 </span>
               </div>
             </div>
@@ -208,11 +240,11 @@ export default function CozyPortfolio() {
           className="flex items-center gap-2 overflow-x-auto pb-3 mb-8 border-b border-[#E5E0D8]"
         >
           {[
-            { id: 'specialties', label: dict.nav.specialties, icon: Layers },
-            { id: 'projects', label: dict.nav.projects, icon: Briefcase },
-            { id: 'experience', label: dict.nav.timeline, icon: Calendar },
-            { id: 'stack', label: dict.nav.stack, icon: Cpu },
-            { id: 'contact', label: dict.nav.contact, icon: Send },
+            { id: 'specialties', label: cozyText.nav.specialties, icon: Layers },
+            { id: 'projects', label: cozyText.nav.projects, icon: Briefcase },
+            { id: 'experience', label: cozyText.nav.timeline, icon: Calendar },
+            { id: 'stack', label: cozyText.nav.stack, icon: Cpu },
+            { id: 'contact', label: cozyText.nav.contact, icon: Send },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -238,7 +270,7 @@ export default function CozyPortfolio() {
           <section id="tour-specialties-container" className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-4 flex flex-col gap-3">
               <span className="text-xs font-bold text-[#8D99AE] tracking-wider uppercase mb-1">
-                {dict.specialties.rosterTitle}
+                {cozyText.specialties.rosterTitle}
               </span>
               {dict.specializations.map((spec) => {
                 const isSelected = spec.id === activeSpec.id;
@@ -253,8 +285,8 @@ export default function CozyPortfolio() {
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-mono font-bold text-[#E07A5F]">
-                        [{spec.code}]
+                      <span className="text-xs font-bold text-[#E07A5F]">
+                        {spec.code}
                       </span>
                       {isSelected && <span className="w-2 h-2 rounded-full bg-[#E07A5F]" />}
                     </div>
@@ -268,8 +300,8 @@ export default function CozyPortfolio() {
             <div className="lg:col-span-8 bg-white rounded-2xl border border-[#E5E0D8] p-6 shadow-sm">
               <div className="flex items-center justify-between pb-4 border-b border-[#F0ECE4] mb-5">
                 <div>
-                  <span className="text-xs font-mono font-semibold text-[#E07A5F] uppercase">
-                    [{activeSpec.code}] // {activeSpec.role}
+                  <span className="text-xs font-semibold text-[#E07A5F] uppercase">
+                    {activeSpec.role}
                   </span>
                   <h3 className="text-2xl font-extrabold text-[#2B2D42] mt-1">{activeSpec.name}</h3>
                 </div>
@@ -283,30 +315,35 @@ export default function CozyPortfolio() {
               </p>
 
               {/* Stats Meters */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                {activeSpec.stats.map((st, sIdx) => (
-                  <div key={sIdx} className="bg-[#FDFBF7] p-3.5 rounded-xl border border-[#E5E0D8]">
-                    <div className="flex justify-between items-baseline text-xs mb-1.5">
-                      <span className="font-semibold text-[#2B2D42]">{st.name}</span>
-                      <span className="font-mono font-bold text-[#E07A5F]">{st.value}%</span>
+              <div className="mb-6">
+                <span className="text-xs font-bold text-[#8D99AE] uppercase tracking-wider block mb-3">
+                  {cozyText.specialties.statsTitle}
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {activeSpec.stats.map((st, sIdx) => (
+                    <div key={sIdx} className="bg-[#FDFBF7] p-3.5 rounded-xl border border-[#E5E0D8]">
+                      <div className="flex justify-between items-baseline text-xs mb-1.5">
+                        <span className="font-semibold text-[#2B2D42]">{st.name}</span>
+                        <span className="font-bold text-[#E07A5F]">{st.value}%</span>
+                      </div>
+                      <div className="h-2 w-full bg-[#E5E0D8] rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${st.value}%` }}
+                          transition={{ duration: 0.8 }}
+                          className="h-full bg-gradient-to-r from-[#E07A5F] to-[#81B29A] rounded-full"
+                        />
+                      </div>
+                      <span className="text-[11px] text-[#8D99AE] block mt-1">{st.desc}</span>
                     </div>
-                    <div className="h-2 w-full bg-[#E5E0D8] rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${st.value}%` }}
-                        transition={{ duration: 0.8 }}
-                        className="h-full bg-gradient-to-r from-[#E07A5F] to-[#81B29A] rounded-full"
-                      />
-                    </div>
-                    <span className="text-[11px] text-[#8D99AE] block mt-1">{st.desc}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               {/* Capabilities checklist */}
               <div className="pt-4 border-t border-[#F0ECE4]">
                 <h4 className="text-xs font-bold text-[#3D405B] uppercase tracking-wider mb-3">
-                  {dict.specialties.skillsTitle}
+                  {cozyText.specialties.capabilitiesTitle}
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {activeSpec.capabilities.map((cap, cIdx) => (
@@ -327,9 +364,9 @@ export default function CozyPortfolio() {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <span className="text-xs font-bold text-[#8D99AE] tracking-wider uppercase">
-                  {dict.projects.tag}
+                  {cozyText.projects.sectionTag}
                 </span>
-                <h3 className="text-xl font-extrabold text-[#2B2D42]">{dict.projects.title}</h3>
+                <h3 className="text-xl font-extrabold text-[#2B2D42]">{cozyText.projects.sectionTitle}</h3>
               </div>
 
               <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-[#E5E0D8]">
@@ -363,8 +400,8 @@ export default function CozyPortfolio() {
                   >
                     <div>
                       <div className="flex items-center justify-between mb-3">
-                        <span className="px-2.5 py-0.5 rounded-full bg-[#F4F1DE] text-[#3D405B] font-mono text-[11px] font-bold">
-                          [{p.code}]
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#F4F1DE] text-[#3D405B] text-[11px] font-bold">
+                          {p.code}
                         </span>
                         <div className="flex items-center gap-2">
                           {p.isPrivate && (
@@ -380,7 +417,7 @@ export default function CozyPortfolio() {
                                 : 'bg-blue-50 text-blue-700'
                             }`}
                           >
-                            {p.status}
+                            {p.status === 'ACTIVE' ? (lang === 'es' ? 'En Producción' : 'Live / Active') : (lang === 'es' ? 'Completado' : 'Completed')}
                           </span>
                         </div>
                       </div>
@@ -412,7 +449,7 @@ export default function CozyPortfolio() {
                             className="overflow-hidden pt-3 border-t border-[#F0ECE4]"
                           >
                             <h5 className="text-[11px] font-bold text-[#3D405B] uppercase mb-2">
-                              {dict.projects.outcomesTitle}
+                              {cozyText.projects.outcomesTitle}
                             </h5>
                             <div className="space-y-1.5">
                               {p.outcomes.map((out, oIdx) => (
@@ -432,7 +469,7 @@ export default function CozyPortfolio() {
                         onClick={() => setExpandedProjId(isExpanded ? null : p.id)}
                         className="text-xs font-semibold text-[#E07A5F] hover:underline cursor-pointer"
                       >
-                        {isExpanded ? dict.projects.collapseBtn : dict.projects.expandBtn}
+                        {isExpanded ? cozyText.projects.collapseBtn : cozyText.projects.expandBtn}
                       </button>
 
                       {p.url && (
@@ -440,10 +477,10 @@ export default function CozyPortfolio() {
                           href={p.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[#F4F1DE] text-[#3D405B] text-xs font-semibold hover:bg-[#EAE6D0] transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F4F1DE] text-[#3D405B] text-xs font-semibold hover:bg-[#EAE6D0] transition-colors"
                         >
                           <Code2 size={12} />
-                          <span>GitHub</span>
+                          <span>{cozyText.projects.repoBtn}</span>
                           <ExternalLink size={10} />
                         </a>
                       )}
@@ -460,9 +497,9 @@ export default function CozyPortfolio() {
           <section id="tour-timeline-container" className="max-w-3xl mx-auto flex flex-col gap-6">
             <div className="text-center mb-4">
               <span className="text-xs font-bold text-[#8D99AE] tracking-wider uppercase">
-                {dict.timeline.tag}
+                {cozyText.timeline.sectionTag}
               </span>
-              <h3 className="text-2xl font-extrabold text-[#2B2D42]">{dict.timeline.title}</h3>
+              <h3 className="text-2xl font-extrabold text-[#2B2D42]">{cozyText.timeline.sectionTitle}</h3>
             </div>
 
             <div className="relative pl-6 border-l-2 border-[#E5E0D8] space-y-8">
@@ -473,10 +510,10 @@ export default function CozyPortfolio() {
 
                   <div className="bg-white rounded-2xl border border-[#E5E0D8] p-6 shadow-sm">
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                      <span className="text-xs font-mono font-bold text-[#E07A5F]">
+                      <span className="text-xs font-bold text-[#E07A5F]">
                         {exp.period}
                       </span>
-                      <span className="text-xs text-[#8D99AE] flex items-center gap-1">
+                      <span className="text-xs text-[#8D99AE] flex items-center gap-1 font-medium">
                         <MapPin size={12} />
                         {exp.geo}
                       </span>
@@ -491,7 +528,7 @@ export default function CozyPortfolio() {
 
                     <div className="pt-3 border-t border-[#F0ECE4] space-y-1.5">
                       <span className="text-[11px] font-bold text-[#3D405B] uppercase tracking-wider block mb-2">
-                        {dict.timeline.outcomesTitle}
+                        {cozyText.timeline.achievementsTitle}
                       </span>
                       {exp.achievements.map((ach, aIdx) => (
                         <div key={aIdx} className="flex items-start gap-2 text-xs text-[#4A4E69]">
@@ -512,16 +549,16 @@ export default function CozyPortfolio() {
           <section id="tour-stack-container" className="flex flex-col gap-6">
             <div className="text-center max-w-xl mx-auto mb-2">
               <span className="text-xs font-bold text-[#8D99AE] tracking-wider uppercase">
-                {dict.stack.tag}
+                {cozyText.stack.sectionTag}
               </span>
-              <h3 className="text-2xl font-extrabold text-[#2B2D42]">{dict.stack.title}</h3>
+              <h3 className="text-2xl font-extrabold text-[#2B2D42]">{cozyText.stack.sectionTitle}</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {dict.skillsList.map((cat) => (
                 <div key={cat.id} className="bg-white rounded-2xl border border-[#E5E0D8] p-6 shadow-sm">
                   <div className="flex items-center justify-between pb-3 border-b border-[#F0ECE4] mb-4">
-                    <span className="text-xs font-mono font-bold text-[#E07A5F]">[{cat.code}]</span>
+                    <span className="text-xs font-bold text-[#E07A5F]">{cat.code}</span>
                     <h4 className="font-bold text-sm text-[#2B2D42]">{cat.title}</h4>
                   </div>
 
@@ -530,7 +567,7 @@ export default function CozyPortfolio() {
                       <div key={skIdx}>
                         <div className="flex justify-between items-baseline text-xs mb-1">
                           <span className="font-semibold text-[#2B2D42]">{sk.name}</span>
-                          <span className="font-mono text-[#81B29A] font-bold">{sk.level}%</span>
+                          <span className="font-bold text-[#81B29A]">{sk.level}%</span>
                         </div>
                         <div className="h-1.5 w-full bg-[#E5E0D8] rounded-full overflow-hidden">
                           <div
@@ -556,15 +593,15 @@ export default function CozyPortfolio() {
             <div className="lg:col-span-5 bg-white rounded-2xl border border-[#E5E0D8] p-6 shadow-sm space-y-4">
               <div>
                 <span className="text-xs font-bold text-[#8D99AE] uppercase tracking-wider block mb-1">
-                  {dict.contact.tag}
+                  {cozyText.contact.sectionTag}
                 </span>
-                <h3 className="text-2xl font-extrabold text-[#2B2D42]">{dict.contact.title}</h3>
-                <p className="text-xs text-[#4A4E69] leading-relaxed mt-2">{dict.contact.description}</p>
+                <h3 className="text-2xl font-extrabold text-[#2B2D42]">{cozyText.contact.sectionTitle}</h3>
+                <p className="text-xs text-[#4A4E69] leading-relaxed mt-2">{cozyText.contact.sectionDesc}</p>
               </div>
 
               <div className="space-y-3 pt-2">
                 <div className="p-3 rounded-xl bg-[#FDFBF7] border border-[#E5E0D8]">
-                  <span className="text-[11px] font-semibold text-[#8D99AE] block">Email Principal:</span>
+                  <span className="text-[11px] font-semibold text-[#8D99AE] block">Email:</span>
                   <a
                     href={`mailto:${dict.identity.contacts.primaryEmail}`}
                     className="text-xs font-bold text-[#E07A5F] hover:underline"
@@ -574,7 +611,7 @@ export default function CozyPortfolio() {
                 </div>
 
                 <div className="p-3 rounded-xl bg-[#FDFBF7] border border-[#E5E0D8]">
-                  <span className="text-[11px] font-semibold text-[#8D99AE] block">Email UTP:</span>
+                  <span className="text-[11px] font-semibold text-[#8D99AE] block">Email Académico:</span>
                   <a
                     href={`mailto:${dict.identity.contacts.institutionalEmail}`}
                     className="text-xs font-bold text-[#3D405B] hover:underline"
@@ -584,7 +621,7 @@ export default function CozyPortfolio() {
                 </div>
 
                 <div className="p-3 rounded-xl bg-[#FDFBF7] border border-[#E5E0D8]">
-                  <span className="text-[11px] font-semibold text-[#8D99AE] block">WhatsApp / Tel:</span>
+                  <span className="text-[11px] font-semibold text-[#8D99AE] block">WhatsApp / Teléfono:</span>
                   <a
                     href={`https://wa.me/${dict.identity.contacts.phone}`}
                     target="_blank"
@@ -614,10 +651,10 @@ export default function CozyPortfolio() {
             {/* Form */}
             <div className="lg:col-span-7 bg-white rounded-2xl border border-[#E5E0D8] p-6 sm:p-8 shadow-sm">
               <h4 className="text-lg font-bold text-[#2B2D42] mb-1">
-                {lang === 'es' ? 'Envía una señal directa' : 'Send a direct message'}
+                {lang === 'es' ? 'Escribe un mensaje directo' : 'Send a direct message'}
               </h4>
               <p className="text-xs text-[#8D99AE] mb-5">
-                {lang === 'es' ? 'Respuestas en menos de 24 horas.' : 'Responses in under 24 hours.'}
+                {lang === 'es' ? 'Respuestas en menos de 24 horas.' : 'Replies in under 24 hours.'}
               </p>
 
               {formSent ? (
@@ -625,54 +662,54 @@ export default function CozyPortfolio() {
                   <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
                     <CheckCircle size={28} />
                   </div>
-                  <h5 className="font-bold text-base text-[#2B2D42]">{dict.contact.successTitle}</h5>
+                  <h5 className="font-bold text-base text-[#2B2D42]">{cozyText.contact.successTitle}</h5>
                   <p className="text-xs text-[#4A4E69] max-w-sm mx-auto mt-1 mb-4">
-                    {dict.contact.successDesc}
+                    {cozyText.contact.successDesc}
                   </p>
                   <button
                     onClick={() => setFormSent(false)}
                     className="px-4 py-2 rounded-xl bg-[#F4F1DE] hover:bg-[#EAE6D0] text-xs font-semibold text-[#3D405B] cursor-pointer"
                   >
-                    {dict.contact.btnNewSignal}
+                    {cozyText.contact.btnNew}
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-[#3D405B] mb-1">
-                      {dict.contact.fieldName}
+                      {lang === 'es' ? 'Nombre o Empresa' : 'Name or Company'}
                     </label>
                     <input
                       type="text"
                       name="name"
                       required
-                      placeholder={dict.contact.placeholderName}
+                      placeholder={lang === 'es' ? 'Tu nombre o el de tu equipo' : 'Your name or team'}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E0D8] bg-[#FDFBF7] text-xs text-[#2B2D42] focus:border-[#E07A5F] focus:outline-none transition-colors"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-[#3D405B] mb-1">
-                      {dict.contact.fieldEmail}
+                      {lang === 'es' ? 'Correo Electrónico' : 'Email Address'}
                     </label>
                     <input
                       type="email"
                       name="email"
                       required
-                      placeholder={dict.contact.placeholderEmail}
+                      placeholder="tu-email@empresa.com"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E0D8] bg-[#FDFBF7] text-xs text-[#2B2D42] focus:border-[#E07A5F] focus:outline-none transition-colors"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-[#3D405B] mb-1">
-                      {dict.contact.fieldMessage}
+                      {lang === 'es' ? 'Mensaje o Propuesta' : 'Message or Proposal'}
                     </label>
                     <textarea
                       name="message"
                       rows={4}
                       required
-                      placeholder={dict.contact.placeholderMsg}
+                      placeholder={lang === 'es' ? 'Cuéntame sobre el proyecto o vacante...' : 'Tell me about your project or role...'}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5E0D8] bg-[#FDFBF7] text-xs text-[#2B2D42] focus:border-[#E07A5F] focus:outline-none transition-colors resize-none"
                     />
                   </div>
@@ -685,12 +722,12 @@ export default function CozyPortfolio() {
                     {formLoading ? (
                       <>
                         <Loader2 size={15} className="animate-spin" />
-                        <span>{dict.contact.btnCompiling}</span>
+                        <span>{cozyText.contact.btnSending}</span>
                       </>
                     ) : (
                       <>
                         <Send size={14} />
-                        <span>{dict.contact.btnSubmit}</span>
+                        <span>{cozyText.contact.btnSubmit}</span>
                       </>
                     )}
                   </button>
@@ -704,11 +741,10 @@ export default function CozyPortfolio() {
       {/* Cozy Footer */}
       <footer className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 mt-12 border-t border-[#E5E0D8] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#8D99AE]">
         <div className="flex items-center gap-2">
-          <Terminal size={13} className="text-[#E07A5F]" />
-          <span>© {new Date().getFullYear()} {dict.footer.copyright}</span>
+          <span>© {new Date().getFullYear()} {dict.identity.name}. {lang === 'es' ? 'Construido con React 19 y Tailwind v4' : 'Built with React 19 & Tailwind v4'}</span>
         </div>
         <div className="flex items-center gap-2">
-          <span>COZY DEVELOPER LO-FI STUDIO · ANDRÉS BROCHERO</span>
+          <span>COZY DEVELOPER LO-FI STUDIO</span>
         </div>
       </footer>
     </div>
