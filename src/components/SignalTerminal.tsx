@@ -3,129 +3,180 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useRef, FormEvent } from "react";
-import { Send, Terminal, Loader2, CheckCircle, Radio } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useEffect, useRef, FormEvent } from 'react';
+import { Send, Terminal, Loader2, CheckCircle, Radio, Phone, Mail, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function SignalTerminal() {
-  const [status, setStatus] = useState<"IDLE" | "COMPILING" | "CONNECTING" | "TRANSMITTED">("IDLE");
+  const { dict } = useLanguage();
+  const [status, setStatus] = useState<'IDLE' | 'COMPILING' | 'CONNECTING' | 'TRANSMITTED'>('IDLE');
   const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
   const handleTerminalSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setStatus("COMPILING");
-    setTerminalLogs([
-      "» Iniciando túnel de comunicación segura...",
-      "» Encriptando paquetes en formato AES-256...",
-      "» Analizando metadata de sesión...",
-    ]);
+    setStatus('COMPILING');
+    setTerminalLogs([dict.contact.logStart, dict.contact.logEncrypt, dict.contact.logMeta]);
 
-    // Simulate terminal actions chain
-    timers.current.push(setTimeout(() => {
-      setStatus("CONNECTING");
-      setTerminalLogs((prev) => [
-        ...prev,
-        "» Compilación completa. Paquete de señal listo.",
-        "» Buscando puertos disponibles: [LATAM-BOG-01]...",
-        "» Frecuencia establecida en 433.92 MHz.",
-        "» Transmitiendo ráfaga de datos...",
-      ]);
-    }, 1200));
+    timers.current.push(
+      setTimeout(() => {
+        setStatus('CONNECTING');
+        setTerminalLogs((prev) => [
+          ...prev,
+          dict.contact.logReady,
+          dict.contact.logFreq,
+          dict.contact.logTransmit,
+        ]);
+      }, 1200)
+    );
 
-    timers.current.push(setTimeout(() => {
-      setStatus("TRANSMITTED");
-      setTerminalLogs((prev) => [
-        ...prev,
-        "» TRANSMISIÓN EXITOSA // SIGNAL RECEIVED.",
-        "» Código de respuesta local: 250 OK SECURE.",
-        "» Andrés recibirá la señal en sus terminales locales.",
-      ]);
-    }, 2800));
+    timers.current.push(
+      setTimeout(() => {
+        setStatus('TRANSMITTED');
+        setTerminalLogs((prev) => [
+          ...prev,
+          dict.contact.logSuccess,
+          dict.contact.logCode,
+          dict.contact.logNotice,
+        ]);
+        if (formRef.current) formRef.current.reset();
+      }, 2800)
+    );
   };
 
   const resetTerminal = () => {
-    setStatus("IDLE");
+    setStatus('IDLE');
     setTerminalLogs([]);
   };
 
+  const { contacts } = dict.identity;
+
   return (
     <div id="tour-contact-container" className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
-      
-      {/* Left Details Grid (MD: Span 5) */}
+      {/* Left Details Grid */}
       <div className="lg:col-span-5 bg-[#12141C]/85 border border-white/10 rounded-sm p-5 flex flex-col justify-between relative overflow-hidden">
         <div>
           <span className="font-mono text-[9px] text-white/30 tracking-widest uppercase block mb-3">
-            LINK_STATUS // CHANNELS
+            {dict.contact.tag}
           </span>
           <h2 className="font-sans text-xl font-black text-white tracking-wide">
-            ESTABLECER CANAL DE COMUNICACIÓN <span className="text-[#FF0055]">_</span>
+            {dict.contact.title} <span className="text-[#FF0055]">_</span>
           </h2>
           <p className="font-sans text-xs text-white/70 leading-relaxed font-light mt-3 bg-white/[0.01] p-3 border border-white/5 rounded-xs">
-            Inicia un enlace directo hacia la frecuencia local del desarrollador. Introduce tus parámetros de señal debajo para encender el transmisor.
+            {dict.contact.description}
           </p>
 
-          {/* Contact Details listed as a terminal parameters */}
-          <div className="flex flex-col gap-3 mt-6">
+          {/* Contact Details */}
+          <div className="flex flex-col gap-2.5 mt-5">
             <div className="flex flex-col gap-0.5 bg-white/[0.01] p-2.5 border border-white/5 rounded-xs">
-              <span className="font-mono text-[8px] text-white/30">NÚCLEO_EMAIL:</span>
-              <a href="mailto:andresaws9401@gmail.com" className="font-mono text-xs text-[#00F0FF] hover:underline hover:text-[#FF0055]">
-                andresaws9401@gmail.com
+              <span className="font-mono text-[8px] text-white/30 flex items-center gap-1">
+                <Mail size={10} className="text-[#00F0FF]" />
+                {dict.contact.primaryEmailLabel}
+              </span>
+              <a
+                href={`mailto:${contacts.primaryEmail}`}
+                className="font-mono text-xs text-[#00F0FF] hover:underline hover:text-[#FF0055]"
+              >
+                {contacts.primaryEmail}
               </a>
-            </div>
-            
-            <div className="flex flex-col gap-0.5 bg-white/[0.01] p-2.5 border border-white/5 rounded-xs">
-              <span className="font-mono text-[8px] text-white/30">NODO_UBICACIÓN:</span>
-              <span className="font-mono text-xs text-white/80">Bogotá D.C., Colombia // UTC-05</span>
             </div>
 
             <div className="flex flex-col gap-0.5 bg-white/[0.01] p-2.5 border border-white/5 rounded-xs">
-              <span className="font-mono text-[8px] text-white/30">REDES_ANALOGÍAS:</span>
+              <span className="font-mono text-[8px] text-white/30 flex items-center gap-1">
+                <Mail size={10} className="text-[#00F0FF]" />
+                {dict.contact.institutionalEmailLabel}
+              </span>
+              <a
+                href={`mailto:${contacts.institutionalEmail}`}
+                className="font-mono text-xs text-white/80 hover:underline hover:text-[#00F0FF]"
+              >
+                {contacts.institutionalEmail}
+              </a>
+            </div>
+
+            <div className="flex flex-col gap-0.5 bg-white/[0.01] p-2.5 border border-white/5 rounded-xs">
+              <span className="font-mono text-[8px] text-white/30 flex items-center gap-1">
+                <Phone size={10} className="text-emerald-400" />
+                {dict.contact.phoneLabel}
+              </span>
+              <a
+                href={`https://wa.me/${contacts.phone.replace(/[^0-9]/g, '')}`}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-xs text-emerald-400 hover:underline"
+              >
+                {contacts.phoneDisplay} (WhatsApp)
+              </a>
+            </div>
+
+            <div className="flex flex-col gap-0.5 bg-white/[0.01] p-2.5 border border-white/5 rounded-xs">
+              <span className="font-mono text-[8px] text-white/30 flex items-center gap-1">
+                <MapPin size={10} className="text-[#FF0055]" />
+                {dict.contact.locationLabel}
+              </span>
+              <span className="font-mono text-xs text-white/80">{contacts.locationDetailed}</span>
+            </div>
+
+            <div className="flex flex-col gap-0.5 bg-white/[0.01] p-2.5 border border-white/5 rounded-xs">
+              <span className="font-mono text-[8px] text-white/30">{dict.contact.socialsLabel}</span>
               <div className="flex items-center gap-3 mt-1.5 font-mono text-[10px] text-[#00F0FF]">
-                <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-[#FF0055] hover:underline">
-                  GITHUB // G_HUB
+                <a
+                  href={contacts.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[#FF0055] hover:underline"
+                >
+                  GITHUB // {contacts.githubUser.replace('github.com/', '')}
                 </a>
                 <span className="text-white/20">|</span>
-                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-[#FF0055] hover:underline">
-                  LINKEDIN // L_NKD
+                <a
+                  href={contacts.linkedinUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[#FF0055] hover:underline"
+                >
+                  LINKEDIN // {contacts.linkedinUser.replace('linkedin.com/in/', '')}
                 </a>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/5 pt-4 mt-6 font-mono text-[9px] text-[#FF0055]/80 flex items-center gap-1.5 font-medium">
+        <div className="border-t border-white/5 pt-4 mt-5 font-mono text-[9px] text-[#FF0055]/80 flex items-center gap-1.5 font-medium">
           <Radio size={12} className="animate-pulse text-[#FF0055]" />
-          <span>FIRM: SECURE_COMMS_SOCKET</span>
+          <span>{dict.contact.firmSocket}</span>
         </div>
       </div>
 
-      {/* Right Terminal Form (MD: Span 7) */}
+      {/* Right Terminal Form */}
       <div className="lg:col-span-7 bg-[#0E1017] border border-[#00F0FF]/25 shadow-[0_0_20px_rgba(0,240,255,0.02)] rounded-sm p-5 md:p-6 relative flex flex-col justify-between min-h-[400px]">
-        {/* Terminal frame border detail */}
         <span className="font-mono text-[9px] text-[#00F0FF]/50 absolute top-3 left-6 tracking-widest uppercase flex items-center gap-1.5">
           <Terminal size={11} />
-          SECURE SHELL COMMS TERMINAL
+          {dict.contact.terminalTitle}
         </span>
-        <span className="absolute top-3 right-6 font-mono text-[8px] text-white/25">PORT: 433</span>
+        <span className="absolute top-3 right-6 font-mono text-[8px] text-white/25">
+          {dict.contact.terminalPort}
+        </span>
 
         <div className="pt-6 flex-1 flex flex-col justify-between">
           <AnimatePresence mode="wait">
-            {status !== "TRANSMITTED" ? (
+            {status !== 'TRANSMITTED' ? (
               <motion.form
                 key="terminal-form"
+                ref={formRef}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onSubmit={handleTerminalSubmit}
                 className="flex flex-col gap-4 mt-2"
               >
-                {/* 1. Name input */}
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="name" className="font-mono text-[9.5px] text-white/50 uppercase tracking-widest">
-                    [1] DEPARTAMENTO / NOMBRE_CODENAME:
+                    {dict.contact.fieldName}
                   </label>
                   <div className="relative flex items-center">
                     <span className="font-mono text-xs text-[#00F0FF] absolute left-3">❯</span>
@@ -133,18 +184,17 @@ export default function SignalTerminal() {
                       id="name"
                       type="text"
                       name="name"
-                      placeholder="e.g. INGENIERO_ALFA"
-                      disabled={status !== "IDLE"}
+                      placeholder={dict.contact.placeholderName}
+                      disabled={status !== 'IDLE'}
                       className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.05] border border-white/10 focus:border-[#00F0FF] outline-none text-white font-mono text-xs py-2.5 pl-7 pr-3 rounded-xs tracking-wider transition-all"
                       required
                     />
                   </div>
                 </div>
 
-                {/* 2. Email input */}
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="email" className="font-mono text-[9.5px] text-white/50 uppercase tracking-widest">
-                    [2] FRECUENCIA / CORREO_ENLACE:
+                    {dict.contact.fieldEmail}
                   </label>
                   <div className="relative flex items-center">
                     <span className="font-mono text-xs text-[#00F0FF] absolute left-3">❯</span>
@@ -152,18 +202,17 @@ export default function SignalTerminal() {
                       id="email"
                       type="email"
                       name="email"
-                      placeholder="andres@frecuencia.com"
-                      disabled={status !== "IDLE"}
+                      placeholder={dict.contact.placeholderEmail}
+                      disabled={status !== 'IDLE'}
                       className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.05] border border-white/10 focus:border-[#00F0FF] outline-none text-white font-mono text-xs py-2.5 pl-7 pr-3 rounded-xs tracking-wider transition-all"
                       required
                     />
                   </div>
                 </div>
 
-                {/* 3. Message Textarea */}
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="message" className="font-mono text-[9.5px] text-white/50 uppercase tracking-widest">
-                    [3] PAQUETE_DATOS / TRANSMISIÓN_MENSAJE:
+                    {dict.contact.fieldMessage}
                   </label>
                   <div className="relative flex items-start">
                     <span className="font-mono text-xs text-[#00F0FF] absolute left-3 top-2.5">❯</span>
@@ -171,29 +220,28 @@ export default function SignalTerminal() {
                       id="message"
                       name="message"
                       rows={4}
-                      placeholder="Escribe tu propuesta o saludo..."
-                      disabled={status !== "IDLE"}
+                      placeholder={dict.contact.placeholderMsg}
+                      disabled={status !== 'IDLE'}
                       className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.05] border border-white/10 focus:border-[#00F0FF] outline-none text-white font-mono text-xs py-2.5 pl-7 pr-3 rounded-xs tracking-wider transition-all resize-none min-h-[90px]"
                       required
                     />
                   </div>
                 </div>
 
-                {/* Compiler Submit button */}
                 <button
                   type="submit"
-                  disabled={status !== "IDLE"}
+                  disabled={status !== 'IDLE'}
                   className="interactive mt-2 font-mono text-xs text-black font-extrabold tracking-widest bg-gradient-to-r from-[#00F0FF] to-[#00AFFF] hover:from-[#FF0055] hover:to-[#CF003C] hover:text-white transition-all duration-300 py-3 rounded-xs uppercase shadow-[0_0_15px_rgba(0,240,255,0.25)] hover:shadow-[0_0_15px_rgba(255,0,85,0.25)] flex items-center justify-center gap-2 cursor-pointer w-full"
                 >
-                  {status === "COMPILING" || status === "CONNECTING" ? (
+                  {status === 'COMPILING' || status === 'CONNECTING' ? (
                     <>
                       <Loader2 size={14} className="animate-spin" />
-                      COMPILANDO_SEÑAL...
+                      {dict.contact.btnCompiling}
                     </>
                   ) : (
                     <>
                       <Send size={13} />
-                      TRANSMITIR_SEÑAL // SEND_NOW
+                      {dict.contact.btnSubmit}
                     </>
                   )}
                 </button>
@@ -209,29 +257,36 @@ export default function SignalTerminal() {
                   <CheckCircle size={26} className="animate-pulse" />
                 </div>
                 <h3 className="font-sans text-[#00F0FF] text-lg font-black tracking-wide uppercase">
-                  SEÑAL DE COMUNICACIÓN ABIERTA
+                  {dict.contact.successTitle}
                 </h3>
                 <p className="font-sans text-xs text-white/80 leading-relaxed max-w-xs mt-2 font-light">
-                  Tu mensaje ha sido cifrado de forma cuántica y enviado al servidor de Andrés. Él volverá a establecer contacto en menos de 24 ciclos localmente.
+                  {dict.contact.successDesc}
                 </p>
 
                 <button
                   onClick={resetTerminal}
                   className="interactive mt-6 font-mono text-[9px] tracking-widest border border-white/10 hover:border-[#00F0FF] text-white/60 hover:text-[#00F0FF] bg-[#12141C] py-2 px-5 rounded-xs uppercase transition-all duration-300 cursor-pointer"
                 >
-                  TRANSMITIR_NUEVA_SEÑAL
+                  {dict.contact.btnNewSignal}
                 </button>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Terminal Real Time Compilation Logs output */}
-          {(terminalLogs.length > 0 || status !== "IDLE") && (
+          {(terminalLogs.length > 0 || status !== 'IDLE') && (
             <div className="border-t border-white/5 pt-3.5 mt-5 font-mono text-[9.5px] text-white/50 text-left bg-black/40 p-3.5 rounded-sm flex flex-col gap-1.5 overflow-y-auto max-h-[140px] leading-tight select-none">
-              <span className="text-[#00F0FF]">SYSTEM@ANDRES:~/COMMS_LOG</span>
+              <span className="text-[#00F0FF]">SYSTEM@ANDRES_BROCHERO:~/COMMS_LOG</span>
               {terminalLogs.map((log, idx) => (
                 <div key={idx} className="flex gap-1">
-                  <span className={log.startsWith("» ERROR") ? "text-[#FF0055]" : log.includes("TRANS") ? "text-emerald-400" : "text-white/70"}>
+                  <span
+                    className={
+                      log.startsWith('» ERROR')
+                        ? 'text-[#FF0055]'
+                        : log.includes('TRANS') || log.includes('RECEIVED') || log.includes('EXITOSA')
+                        ? 'text-emerald-400'
+                        : 'text-white/70'
+                    }
+                  >
                     {log}
                   </span>
                 </div>
@@ -240,7 +295,6 @@ export default function SignalTerminal() {
           )}
         </div>
       </div>
-
     </div>
   );
 }

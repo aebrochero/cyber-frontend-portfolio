@@ -16,6 +16,10 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "strict": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   }
 }
