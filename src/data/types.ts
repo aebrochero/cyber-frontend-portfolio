@@ -122,7 +122,6 @@ export interface ContentDictionary {
     filterAll: string;
     filterCompleted: string;
     filterActive: string;
-    filterMaintenance: string;
     outcomesTitle: string;
     collapseBtn: string;
     expandBtn: string;

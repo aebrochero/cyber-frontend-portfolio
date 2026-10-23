@@ -42,7 +42,6 @@ export const DICTIONARY_EN: ContentDictionary = {
     filterAll: 'VIEW_ALL',
     filterCompleted: 'COMPLETED',
     filterActive: 'ACTIVE',
-    filterMaintenance: 'MAINTENANCE',
     outcomesTitle: 'IMPACTS & DELIVERABLES // COMPONENT_METRICS',
     collapseBtn: 'COLLAPSE_REPORT [-]',
     expandBtn: 'VIEW_DELIVERABLES [+]',

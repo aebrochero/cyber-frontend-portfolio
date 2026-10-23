@@ -30,7 +30,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLangState(nextLang);
     try {
       localStorage.setItem(STORAGE_KEY, nextLang);
-      document.documentElement.lang = nextLang;
     } catch {
       // storage unavailable
     }

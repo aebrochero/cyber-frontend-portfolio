@@ -42,7 +42,6 @@ export const DICTIONARY_ES: ContentDictionary = {
     filterAll: 'VER_TODO',
     filterCompleted: 'COMPLETADO',
     filterActive: 'ACTIVO',
-    filterMaintenance: 'MANTENIMIENTO',
     outcomesTitle: 'IMPACTOS Y ENTREGABLES // COMPONENT_METRICS',
     collapseBtn: 'REDUCIR_REPORTE [-]',
     expandBtn: 'VER_ENTREGABLES [+]',
