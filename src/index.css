@@ -3,6 +3,9 @@
 @theme {
   --font-sans: "Outfit", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-cozy: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif-ink: "Fraunces", Georgia, serif;
+  --font-arcade: "Press Start 2P", monospace;
   --animate-scanline: scanline 15s linear infinite;
   @keyframes scanline {
     from { top: 0%; }
