@@ -59,37 +59,25 @@ export default function VaporwavePortfolio() {
   };
 
   const startVaporTour = () => {
-    const tourOverrides = vaporText.tourStepOverrides;
+    const stepMap: Record<string, { title: string; description: string }> = {
+      '#tour-hero-identity': vaporText.tourSteps.heroIdentity,
+      '#tour-hero-specs': vaporText.tourSteps.heroSpecs,
+      '#tour-nav-sections': vaporText.tourSteps.navSections,
+      '#tour-specialties-container': vaporText.tourSteps.specialties,
+      '#tour-projects-container': vaporText.tourSteps.projects,
+      '#tour-timeline-container': vaporText.tourSteps.timeline,
+      '#tour-stack-container': vaporText.tourSteps.stack,
+      '#tour-contact-container': vaporText.tourSteps.contact,
+    };
 
     const steps: DriveStep[] = dict.tourSteps.map((s) => {
-      let title = `★ ${s.title} ★`;
-      let desc = s.description;
-
-      if (tourOverrides) {
-        if (s.sectionId === 'specialties' && s.element === '#tour-specialties-container') {
-          title = `★ ${tourOverrides.specialtiesTitle} ★`;
-          desc = tourOverrides.specialtiesDesc;
-        } else if (s.sectionId === 'projects') {
-          title = `★ ${tourOverrides.projectsTitle} ★`;
-          desc = tourOverrides.projectsDesc;
-        } else if (s.sectionId === 'timeline') {
-          title = `★ ${tourOverrides.timelineTitle} ★`;
-          desc = tourOverrides.timelineDesc;
-        } else if (s.sectionId === 'stack') {
-          title = `★ ${tourOverrides.stackTitle} ★`;
-          desc = tourOverrides.stackDesc;
-        } else if (s.sectionId === 'contact') {
-          title = `★ ${tourOverrides.contactTitle} ★`;
-          desc = tourOverrides.contactDesc;
-        }
-      }
-
+      const mapped = stepMap[s.element];
       return {
         element: s.element,
         waitForElement: 2500,
         popover: {
-          title,
-          description: desc,
+          title: mapped ? mapped.title : `★ ${s.title} ★`,
+          description: mapped ? mapped.description : s.description,
           side: s.side,
           align: s.align,
           popoverClass: 'vapor-popover',
@@ -104,10 +92,10 @@ export default function VaporwavePortfolio() {
       overlayOpacity: 0.85,
       stagePadding: 8,
       stageRadius: 4,
-      progressText: dict.tourUi.progress,
-      nextBtnText: dict.tourUi.next,
-      prevBtnText: dict.tourUi.prev,
-      doneBtnText: dict.tourUi.done,
+      progressText: vaporText.tourUi.progress,
+      nextBtnText: vaporText.tourUi.next,
+      prevBtnText: vaporText.tourUi.prev,
+      doneBtnText: vaporText.tourUi.done,
       steps,
     });
 
@@ -250,7 +238,7 @@ export default function VaporwavePortfolio() {
                 <Radio size={12} className="text-[#FF007F] animate-pulse" />
               </span>
 
-              {dict.identity.systemSpecs.map((s, idx) => (
+              {(vaporText.hero.specsList || dict.identity.systemSpecs).map((s, idx) => (
                 <div key={idx} className="flex justify-between items-center py-1 border-b border-white/5 text-[11px]">
                   <span className="text-white/50">{s.label}:</span>
                   <span className="text-[#00F0FF] font-bold text-right truncate max-w-[65%]">
@@ -407,10 +395,10 @@ export default function VaporwavePortfolio() {
                     }`}
                   >
                     {filter === 'ALL'
-                      ? dict.projects.filterAll
+                      ? vaporText.projects.filters.all
                       : filter === 'ACTIVE'
-                      ? dict.projects.filterActive
-                      : dict.projects.filterCompleted}
+                      ? vaporText.projects.filters.active
+                      : vaporText.projects.filters.completed}
                   </button>
                 ))}
               </div>
@@ -432,7 +420,7 @@ export default function VaporwavePortfolio() {
                         <div className="flex items-center gap-2">
                           {p.isPrivate && (
                             <span className="text-[10px] text-[#FFE600] border border-[#FFE600] px-1.5 py-0.2">
-                              PRIVATE
+                              {vaporText.projects.privateBadge}
                             </span>
                           )}
                           <span
@@ -442,7 +430,9 @@ export default function VaporwavePortfolio() {
                                 : 'bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/40'
                             }`}
                           >
-                            {p.status}
+                            {p.status === 'ACTIVE'
+                              ? vaporText.projects.statusActive
+                              : vaporText.projects.statusCompleted}
                           </span>
                         </div>
                       </div>
@@ -579,7 +569,7 @@ export default function VaporwavePortfolio() {
                 <div key={cat.id} className="bg-[#120524]/90 border border-[#00F0FF]/40 p-5 rounded-xs">
                   <div className="flex items-center justify-between pb-3 border-b border-[#00F0FF]/30 mb-4">
                     <span className="text-xs font-bold text-[#FF007F]">[{cat.code}]</span>
-                    <h4 className="font-bold text-xs text-white">{cat.title}</h4>
+                    <h4 className="font-bold text-xs text-white">{vaporText.stack.categoryLabels[cat.code] || cat.title}</h4>
                   </div>
 
                   <div className="space-y-4">

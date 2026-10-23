@@ -55,37 +55,25 @@ export default function MinimalPortfolio() {
   };
 
   const startMinimalTour = () => {
-    const tourOverrides = minimalText.tourStepOverrides;
+    const stepMap: Record<string, { title: string; description: string }> = {
+      '#tour-hero-identity': minimalText.tourSteps.heroIdentity,
+      '#tour-hero-specs': minimalText.tourSteps.heroSpecs,
+      '#tour-nav-sections': minimalText.tourSteps.navSections,
+      '#tour-specialties-container': minimalText.tourSteps.specialties,
+      '#tour-projects-container': minimalText.tourSteps.projects,
+      '#tour-timeline-container': minimalText.tourSteps.timeline,
+      '#tour-stack-container': minimalText.tourSteps.stack,
+      '#tour-contact-container': minimalText.tourSteps.contact,
+    };
 
     const steps: DriveStep[] = dict.tourSteps.map((s) => {
-      let title = s.title;
-      let desc = s.description;
-
-      if (tourOverrides) {
-        if (s.sectionId === 'specialties' && s.element === '#tour-specialties-container') {
-          title = tourOverrides.specialtiesTitle;
-          desc = tourOverrides.specialtiesDesc;
-        } else if (s.sectionId === 'projects') {
-          title = tourOverrides.projectsTitle;
-          desc = tourOverrides.projectsDesc;
-        } else if (s.sectionId === 'timeline') {
-          title = tourOverrides.timelineTitle;
-          desc = tourOverrides.timelineDesc;
-        } else if (s.sectionId === 'stack') {
-          title = tourOverrides.stackTitle;
-          desc = tourOverrides.stackDesc;
-        } else if (s.sectionId === 'contact') {
-          title = tourOverrides.contactTitle;
-          desc = tourOverrides.contactDesc;
-        }
-      }
-
+      const mapped = stepMap[s.element];
       return {
         element: s.element,
         waitForElement: 2500,
         popover: {
-          title,
-          description: desc,
+          title: mapped ? mapped.title : s.title,
+          description: mapped ? mapped.description : s.description,
           side: s.side,
           align: s.align,
           popoverClass: 'minimal-popover',
@@ -100,10 +88,10 @@ export default function MinimalPortfolio() {
       overlayOpacity: 0.65,
       stagePadding: 8,
       stageRadius: 0,
-      progressText: dict.tourUi.progress,
-      nextBtnText: dict.tourUi.next,
-      prevBtnText: dict.tourUi.prev,
-      doneBtnText: dict.tourUi.done,
+      progressText: minimalText.tourUi.progress,
+      nextBtnText: minimalText.tourUi.next,
+      prevBtnText: minimalText.tourUi.prev,
+      doneBtnText: minimalText.tourUi.done,
       steps,
     });
 
@@ -200,7 +188,7 @@ export default function MinimalPortfolio() {
                 [{minimalText.hero.specsTitle}]
               </span>
               <div className="space-y-2 text-[11px]">
-                {dict.identity.systemSpecs.map((s, idx) => (
+                {(minimalText.hero.specsList || dict.identity.systemSpecs).map((s, idx) => (
                   <div key={idx} className="pb-1.5 border-b border-stone-200 last:border-0">
                     <span className="text-[#888] block text-[9.5px] uppercase">{s.label}</span>
                     <span className="font-bold text-[#1A1A1A] block">{s.value}</span>
@@ -338,10 +326,10 @@ export default function MinimalPortfolio() {
                     }`}
                   >
                     {filter === 'ALL'
-                      ? dict.projects.filterAll
+                      ? minimalText.projects.filters.all
                       : filter === 'ACTIVE'
-                      ? dict.projects.filterActive
-                      : dict.projects.filterCompleted}
+                      ? minimalText.projects.filters.active
+                      : minimalText.projects.filters.completed}
                   </button>
                 ))}
               </div>
@@ -353,15 +341,19 @@ export default function MinimalPortfolio() {
                 return (
                   <article key={p.id} className="py-6 first:pt-2">
                     <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2 font-mono text-xs text-[#888]">
-                      <span>{p.code} // {p.type}</span>
+                      <span>{p.code} — {p.type}</span>
                       <div className="flex items-center gap-2">
                         {p.isPrivate && (
                           <span className="border border-stone-300 px-1.5 text-[10px] text-[#444] flex items-center gap-1">
                             <Lock size={9} />
-                            PRIVATE
+                            {minimalText.projects.privateBadge}
                           </span>
                         )}
-                        <span className="text-[#1A1A1A] font-bold">STATUS: {p.status}</span>
+                        <span className="text-[#1A1A1A] font-bold">
+                          {p.status === 'ACTIVE'
+                            ? minimalText.projects.statusActive
+                            : minimalText.projects.statusCompleted}
+                        </span>
                       </div>
                     </div>
 
@@ -491,7 +483,9 @@ export default function MinimalPortfolio() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {dict.skillsList.map((cat) => (
                 <div key={cat.id} className="border border-[#1A1A1A] p-5 bg-white shadow-[4px_4px_0px_#1A1A1A]">
-                  <span className="font-mono text-[10px] text-[#888] block">{cat.code}</span>
+                  <span className="font-mono text-[10px] text-[#888] block">
+                    {minimalText.stack.categoryLabels[cat.code] || cat.code}
+                  </span>
                   <h4 className="font-serif-ink text-base font-bold text-[#1A1A1A] pb-3 border-b border-stone-200 mb-4">
                     {cat.title}
                   </h4>

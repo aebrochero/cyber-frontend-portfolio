@@ -58,37 +58,25 @@ export default function CozyPortfolio() {
   };
 
   const startCozyTour = () => {
-    const tourOverrides = cozyText.tourStepOverrides;
+    const stepMap: Record<string, { title: string; description: string }> = {
+      '#tour-hero-identity': cozyText.tourSteps.heroIdentity,
+      '#tour-hero-specs': cozyText.tourSteps.heroSpecs,
+      '#tour-nav-sections': cozyText.tourSteps.navSections,
+      '#tour-specialties-container': cozyText.tourSteps.specialties,
+      '#tour-projects-container': cozyText.tourSteps.projects,
+      '#tour-timeline-container': cozyText.tourSteps.timeline,
+      '#tour-stack-container': cozyText.tourSteps.stack,
+      '#tour-contact-container': cozyText.tourSteps.contact,
+    };
 
     const steps: DriveStep[] = dict.tourSteps.map((s) => {
-      let title = s.title;
-      let desc = s.description;
-
-      if (tourOverrides) {
-        if (s.sectionId === 'specialties' && s.element === '#tour-specialties-container') {
-          title = tourOverrides.specialtiesTitle;
-          desc = tourOverrides.specialtiesDesc;
-        } else if (s.sectionId === 'projects') {
-          title = tourOverrides.projectsTitle;
-          desc = tourOverrides.projectsDesc;
-        } else if (s.sectionId === 'timeline') {
-          title = tourOverrides.timelineTitle;
-          desc = tourOverrides.timelineDesc;
-        } else if (s.sectionId === 'stack') {
-          title = tourOverrides.stackTitle;
-          desc = tourOverrides.stackDesc;
-        } else if (s.sectionId === 'contact') {
-          title = tourOverrides.contactTitle;
-          desc = tourOverrides.contactDesc;
-        }
-      }
-
+      const mapped = stepMap[s.element];
       return {
         element: s.element,
         waitForElement: 2500,
         popover: {
-          title,
-          description: desc,
+          title: mapped ? mapped.title : s.title,
+          description: mapped ? mapped.description : s.description,
           side: s.side,
           align: s.align,
           popoverClass: 'cozy-popover',
@@ -103,10 +91,10 @@ export default function CozyPortfolio() {
       overlayOpacity: 0.65,
       stagePadding: 8,
       stageRadius: 10,
-      progressText: dict.tourUi.progress,
-      nextBtnText: dict.tourUi.next,
-      prevBtnText: dict.tourUi.prev,
-      doneBtnText: dict.tourUi.done,
+      progressText: cozyText.tourUi.progress,
+      nextBtnText: cozyText.tourUi.next,
+      prevBtnText: cozyText.tourUi.prev,
+      doneBtnText: cozyText.tourUi.done,
       steps,
     });
 
@@ -381,10 +369,10 @@ export default function CozyPortfolio() {
                     }`}
                   >
                     {filter === 'ALL'
-                      ? dict.projects.filterAll
+                      ? cozyText.projects.filters.all
                       : filter === 'ACTIVE'
-                      ? dict.projects.filterActive
-                      : dict.projects.filterCompleted}
+                      ? cozyText.projects.filters.active
+                      : cozyText.projects.filters.completed}
                   </button>
                 ))}
               </div>
@@ -407,7 +395,7 @@ export default function CozyPortfolio() {
                           {p.isPrivate && (
                             <span className="inline-flex items-center gap-1 text-[11px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                               <Lock size={10} />
-                              {dict.projects.privateBadge}
+                              {cozyText.projects.privateBadge}
                             </span>
                           )}
                           <span
@@ -417,7 +405,9 @@ export default function CozyPortfolio() {
                                 : 'bg-blue-50 text-blue-700'
                             }`}
                           >
-                            {p.status === 'ACTIVE' ? (lang === 'es' ? 'En Producción' : 'Live / Active') : (lang === 'es' ? 'Completado' : 'Completed')}
+                            {p.status === 'ACTIVE'
+                              ? cozyText.projects.statusActive
+                              : cozyText.projects.statusCompleted}
                           </span>
                         </div>
                       </div>
@@ -558,8 +548,12 @@ export default function CozyPortfolio() {
               {dict.skillsList.map((cat) => (
                 <div key={cat.id} className="bg-white rounded-2xl border border-[#E5E0D8] p-6 shadow-sm">
                   <div className="flex items-center justify-between pb-3 border-b border-[#F0ECE4] mb-4">
-                    <span className="text-xs font-bold text-[#E07A5F]">{cat.code}</span>
-                    <h4 className="font-bold text-sm text-[#2B2D42]">{cat.title}</h4>
+                    <h4 className="font-bold text-sm text-[#2B2D42]">
+                      {cozyText.stack.categoryLabels[cat.code] || cat.title}
+                    </h4>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#F4F1DE] text-[#3D405B]">
+                      {cat.skills.length} {lang === 'es' ? 'habilidades' : 'skills'}
+                    </span>
                   </div>
 
                   <div className="space-y-4">
