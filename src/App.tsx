@@ -33,20 +33,16 @@ const SECTION_COMPONENTS: Record<string, ComponentType> = {
   contact: SignalTerminal,
 };
 
+const fmtTime = () => new Date().toISOString().replace("T", " // ").substring(0, 22);
+
 export default function App() {
   const [activeSection, setActiveSection] = useState("specialties");
-  const [tickerTime, setTickerTime] = useState("");
+  const [tickerTime, setTickerTime] = useState(fmtTime);
   const { startTour } = useProfileTour(activeSection, setActiveSection);
 
   // Update dynamic clock in the HUD to simulate live node syncing
   useEffect(() => {
-    const updateClock = () => {
-      const now = new Date();
-      const timeStr = now.toISOString().replace("T", " // ").substring(0, 22);
-      setTickerTime(timeStr);
-    };
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
+    const interval = setInterval(() => setTickerTime(fmtTime()), 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -126,7 +122,7 @@ export default function App() {
             ))}
             <div className="flex justify-between items-center py-1 mt-1 font-semibold text-[#FF0055]">
               <span>SYSTEM_TIME // UTC</span>
-              <span className="animate-pulse">{tickerTime || "SYNCING..."}</span>
+              <span className="animate-pulse">{tickerTime}</span>
             </div>
           </div>
 
@@ -148,7 +144,7 @@ export default function App() {
       </main>
 
       {/* 5. Footer and copyright details */}
-      <footer className="border-t border-white/5 mt-12 pt-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-mono text-[9px] text-white/30">
+      <footer className="border-t border-white/5 mt-12 pt-4 flex flex-col md:flex-row md:items-center justify-between gap-3 font-mono text-[9px] text-white/30">
         <div className="flex items-center gap-1.5 font-light">
           <Terminal size={11} className="text-[#00F0FF]" />
           <span>© {new Date().getFullYear()} ANDRES_FRONT_ENGINEER. ALL CHANNELS VERIFIED ENCRYPTED.</span>

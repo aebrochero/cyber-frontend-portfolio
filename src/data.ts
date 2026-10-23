@@ -3,15 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Specialization, Project, Experience, SkillCategory } from "./types";
 
 export const DEVELOPER_IDENTITY = {
   name: "ANDRÉS",
-  title: "FRONTEND ENGINEER / INTERACTIVE CREATIVE",
   location: "UTC-05:00 // LATAM-BOG-01",
   status: "ACTIVE_DEVS_AVAILABLE",
   firmware: "VITE-REACT-19.0.2",
-  avatarId: "main_hud",
   summary: "Frontend Developer con especialización en arquitecturas SPA hiper-reactivas, diseño de movimiento fluido y optimización de rendimiento a bajo nivel. Creador de interfaces que se sienten como software de alta tecnología.",
   systemSpecs: [
     { label: "CODENAME", value: "A-GATEWAYS_09" },
@@ -20,7 +17,7 @@ export const DEVELOPER_IDENTITY = {
   ]
 };
 
-export const SPECIALIZATIONS: Specialization[] = [
+export const SPECIALIZATIONS = [
   {
     id: "spec-01",
     code: "01",
@@ -86,7 +83,7 @@ export const SPECIALIZATIONS: Specialization[] = [
   }
 ];
 
-export const PROJECTS: Project[] = [
+export const PROJECTS = [
   {
     id: "proj-01",
     code: "PJ_X1",
@@ -153,7 +150,7 @@ export const PROJECTS: Project[] = [
   }
 ];
 
-export const EXPERIENCE_TIMELINE: Experience[] = [
+export const EXPERIENCE_TIMELINE = [
   {
     id: "exp-01",
     period: "2024 - PRESENTE",
@@ -198,7 +195,7 @@ export const EXPERIENCE_TIMELINE: Experience[] = [
   }
 ];
 
-export const SKILLS_DIAGNOSTICS: SkillCategory[] = [
+export const SKILLS_DIAGNOSTICS = [
   {
     id: "sc-01",
     title: "FRONTEND ENGINES",

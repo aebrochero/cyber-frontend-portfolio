@@ -5,7 +5,6 @@
 
 import { useState } from "react";
 import { PROJECTS } from "../data";
-import { Project } from "../types";
 import { ExternalLink, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -20,16 +19,11 @@ export default function MissionLogs() {
     return p.status === filter;
   });
 
-  const getSecurityStyles = (level: Project["securityLevel"]) => {
-    switch (level) {
-      case "CLASSIFIED":
-        return "text-[#FF0055] bg-[#FF0055]/10 border-[#FF0055]/30 animate-pulse";
-      case "LEVEL_3":
-        return "text-amber-400 bg-amber-400/10 border-amber-400/20";
-      default:
-        return "text-white/50 bg-white/5 border-white/10";
-    }
+  const securityStyles: Record<string, string> = {
+    CLASSIFIED: "text-[#FF0055] bg-[#FF0055]/10 border-[#FF0055]/30 animate-pulse",
+    LEVEL_3: "text-amber-400 bg-amber-400/10 border-amber-400/20",
   };
+  const defaultSecurityStyle = "text-white/50 bg-white/5 border-white/10";
 
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
@@ -91,7 +85,7 @@ export default function MissionLogs() {
                   
                   <div className="flex items-center gap-2">
                     {/* Security Badge */}
-                    <span className={`font-mono text-[8px] tracking-wider px-2 py-0.5 border rounded-xs ${getSecurityStyles(proj.securityLevel)}`}>
+                    <span className={`font-mono text-[8px] tracking-wider px-2 py-0.5 border rounded-xs ${securityStyles[proj.securityLevel] ?? defaultSecurityStyle}`}>
                       {proj.securityLevel}
                     </span>
 

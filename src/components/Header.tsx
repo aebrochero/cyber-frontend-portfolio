@@ -109,6 +109,8 @@ export default function Header({
           )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={mobileMenuOpen}
             className="flex items-center justify-center p-2 border border-white/10 rounded-sm bg-white/5 hover:bg-white/10 transition-colors text-white"
           >
             {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}

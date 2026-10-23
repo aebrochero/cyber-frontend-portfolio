@@ -4,7 +4,6 @@
  */
 
 import { ReactNode } from "react";
-import { motion } from "motion/react";
 
 interface HUDOverlayProps {
   children: ReactNode;
@@ -43,12 +42,7 @@ export default function HUDOverlay({ children }: HUDOverlayProps) {
         <span className="absolute -bottom-1.5 -right-1.5 font-mono text-[10px] text-[#00F0FF]/40 leading-none select-none">+</span>
 
         {/* Dynamic Scanline laser simulation */}
-        <motion.div 
-          initial={{ y: "0%" }}
-          animate={{ y: "100%" }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#00F0FF]/25 to-transparent shadow-[0_0_8px_rgba(0,240,255,0.4)]"
-        />
+        <div className="animate-scanline absolute inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-[#00F0FF]/25 to-transparent shadow-[0_0_8px_rgba(0,240,255,0.4)]" />
       </div>
 
       {/* 4. Active Main App Container */}

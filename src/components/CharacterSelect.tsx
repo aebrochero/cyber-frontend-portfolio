@@ -66,7 +66,7 @@ export default function CharacterSelect() {
 
             {/* Central glowing indicator */}
             <circle cx="100" cy="100" r="10" fill="#00F0FF" className="animate-pulse" />
-            <text x="100" y="104" fontClassName="text-mono" fontSize="10" fill="#12141C" textAnchor="middle" fontWeight="bold">01</text>
+            <text x="100" y="104" className="font-mono" fontSize="10" fill="#12141C" textAnchor="middle" fontWeight="bold">01</text>
           </svg>
         );
       case "motion":
@@ -138,7 +138,7 @@ export default function CharacterSelect() {
             <circle cx="100" cy="100" r="6" fill="#FF0055" />
             <circle cx="140" cy="100" r="4" fill="#00F0FF" />
             <circle cx="60" cy="100" r="4" fill="#00F0FF" />
-            <text x="100" y="130" fontClassName="text-mono" fontSize="9" fill="#FF0055" textAnchor="middle" fontWeight="bold">FPS: 60+</text>
+            <text x="100" y="130" className="font-mono" fontSize="9" fill="#FF0055" textAnchor="middle" fontWeight="bold">FPS: 60+</text>
           </svg>
         );
       case "performance":
@@ -178,8 +178,8 @@ export default function CharacterSelect() {
 
             {/* Core computer speed metrics representation */}
             <rect x="75" y="85" width="50" height="30" fill="#08090C" stroke="rgba(255, 215, 0, 0.4)" strokeWidth="1" rx="2" />
-            <text x="100" y="103" fontClassName="text-mono" fontSize="11" fill="#FFD700" textAnchor="middle" fontWeight="bold">99.8%</text>
-            <text x="100" y="125" fontClassName="text-mono" fontSize="8" fill="rgba(255,255,255,0.4)" textAnchor="middle">LATENCY: OK</text>
+            <text x="100" y="103" className="font-mono" fontSize="11" fill="#FFD700" textAnchor="middle" fontWeight="bold">99.8%</text>
+            <text x="100" y="125" className="font-mono" fontSize="8" fill="rgba(255,255,255,0.4)" textAnchor="middle">LATENCY: OK</text>
           </svg>
         );
       default:
@@ -366,7 +366,7 @@ export default function CharacterSelect() {
               </div>
 
               {/* Status footer for stats */}
-              <div className="border-t border-white/5 pt-3 mt-3 flex items-center justify-between text-mono text-[9px]">
+              <div className="border-t border-white/5 pt-3 mt-3 flex items-center justify-between font-mono text-[9px]">
                 <span className="text-white/40 uppercase">EVALUATION METRIC</span>
                 <span className="text-[#FF0055]/90 flex items-center gap-1.5">
                   <Sparkles size={11} className="animate-spin text-[#FF0055]" />

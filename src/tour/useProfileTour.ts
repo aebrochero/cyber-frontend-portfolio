@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useRef, useCallback } from "react";
+import { useCallback } from "react";
 import { driver, Driver, DriveStep } from "driver.js";
 import "./driver-theme.css";
 
@@ -86,8 +86,6 @@ export function useProfileTour(
   activeSection: string,
   setActiveSection: (sectionId: string) => void
 ) {
-  const driverInstanceRef = useRef<Driver | null>(null);
-
   const startTour = useCallback(() => {
     // If we're not in specialties section, switch first so hero + specialties are mounted
     if (activeSection !== "specialties") {
@@ -106,6 +104,22 @@ export function useProfileTour(
       },
     }));
 
+    const stepTo = (delta: 1 | -1, opts: { index?: number; driver: Driver }) => {
+      const curIdx = opts.index ?? 0;
+      const target = TOUR_STEPS_METADATA[curIdx + delta];
+      if (!target) {
+        if (delta === 1) opts.driver.destroy();
+        return;
+      }
+      const move = () => (delta === 1 ? opts.driver.moveNext() : opts.driver.movePrevious());
+      if (target.sectionId !== TOUR_STEPS_METADATA[curIdx]?.sectionId) {
+        setActiveSection(target.sectionId);
+        setTimeout(move, 280);
+      } else {
+        move();
+      }
+    };
+
     const driverObj = driver({
       animate: true,
       duration: 350,
@@ -121,53 +135,9 @@ export function useProfileTour(
       doneBtnText: "FINALIZAR TOUR ✓",
       steps: driveSteps,
 
-      onNextClick: (_el, _step, opts) => {
-        const curIdx = opts.index ?? 0;
-        const nextIdx = curIdx + 1;
-        const nextMeta = TOUR_STEPS_METADATA[nextIdx];
-
-        if (!nextMeta) {
-          opts.driver.destroy();
-          return;
-        }
-
-        const currentMeta = TOUR_STEPS_METADATA[curIdx];
-        if (nextMeta.sectionId !== currentMeta?.sectionId) {
-          setActiveSection(nextMeta.sectionId);
-          setTimeout(() => {
-            opts.driver.moveNext();
-          }, 280);
-        } else {
-          opts.driver.moveNext();
-        }
-      },
-
-      onPrevClick: (_el, _step, opts) => {
-        const curIdx = opts.index ?? 0;
-        const prevIdx = curIdx - 1;
-        const prevMeta = TOUR_STEPS_METADATA[prevIdx];
-
-        if (!prevMeta) {
-          return;
-        }
-
-        const currentMeta = TOUR_STEPS_METADATA[curIdx];
-        if (prevMeta.sectionId !== currentMeta?.sectionId) {
-          setActiveSection(prevMeta.sectionId);
-          setTimeout(() => {
-            opts.driver.movePrevious();
-          }, 280);
-        } else {
-          opts.driver.movePrevious();
-        }
-      },
-
-      onDestroyed: () => {
-        driverInstanceRef.current = null;
-      },
+      onNextClick: (_el, _step, opts) => stepTo(1, opts),
+      onPrevClick: (_el, _step, opts) => stepTo(-1, opts),
     });
-
-    driverInstanceRef.current = driverObj;
 
     // Small delay to ensure initial layout transition is stable
     setTimeout(() => {

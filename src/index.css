@@ -3,6 +3,11 @@
 @theme {
   --font-sans: "Outfit", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --animate-scanline: scanline 15s linear infinite;
+  @keyframes scanline {
+    from { top: 0%; }
+    to { top: 100%; }
+  }
 }
 
 /* Hide scrollbar for layout */

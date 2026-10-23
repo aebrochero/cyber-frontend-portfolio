@@ -91,15 +91,15 @@ export default function DiagnosticStack() {
             </div>
 
             <div className="mt-6 flex flex-col gap-2.5">
-              <div className="flex justify-between items-center text-mono text-[10px] bg-white/[0.02] px-2.5 py-1.5 border border-white/5 rounded-xs">
+              <div className="flex justify-between items-center font-mono text-[10px] bg-white/[0.02] px-2.5 py-1.5 border border-white/5 rounded-xs">
                 <span className="text-white/40">COMPLIANCE</span>
                 <span className="text-emerald-400 font-semibold uppercase">WCAG AAA</span>
               </div>
-              <div className="flex justify-between items-center text-mono text-[10px] bg-white/[0.02] px-2.5 py-1.5 border border-white/5 rounded-xs">
+              <div className="flex justify-between items-center font-mono text-[10px] bg-white/[0.02] px-2.5 py-1.5 border border-white/5 rounded-xs">
                 <span className="text-white/40">RENDERING_SPEED</span>
                 <span className="text-[#00F0FF] font-semibold uppercase">&lt; 16MS</span>
               </div>
-              <div className="flex justify-between items-center text-mono text-[10px] bg-white/[0.02] px-2.5 py-1.5 border border-white/5 rounded-xs">
+              <div className="flex justify-between items-center font-mono text-[10px] bg-white/[0.02] px-2.5 py-1.5 border border-white/5 rounded-xs">
                 <span className="text-white/40">TYPES_COVERAGE</span>
                 <span className="text-white font-semibold uppercase">100% STRICT</span>
               </div>

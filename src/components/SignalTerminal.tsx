@@ -3,31 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
 import { Send, Terminal, Loader2, CheckCircle, Radio } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function SignalTerminal() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"IDLE" | "COMPILING" | "CONNECTING" | "TRANSMITTED">("IDLE");
   const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
-  const handleTerminalSubmit = async (e: FormEvent) => {
+  const handleTerminalSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
-      setTerminalLogs((prev) => [
-        ...prev,
-        "» ERROR: CRITICAL_FIELDS_EMPTY",
-        "» Por favor, rellena name, email y mensaje.",
-      ]);
-      return;
-    }
-
     setStatus("COMPILING");
     setTerminalLogs([
       "» Iniciando túnel de comunicación segura...",
@@ -36,7 +24,7 @@ export default function SignalTerminal() {
     ]);
 
     // Simulate terminal actions chain
-    setTimeout(() => {
+    timers.current.push(setTimeout(() => {
       setStatus("CONNECTING");
       setTerminalLogs((prev) => [
         ...prev,
@@ -45,9 +33,9 @@ export default function SignalTerminal() {
         "» Frecuencia establecida en 433.92 MHz.",
         "» Transmitiendo ráfaga de datos...",
       ]);
-    }, 1200);
+    }, 1200));
 
-    setTimeout(() => {
+    timers.current.push(setTimeout(() => {
       setStatus("TRANSMITTED");
       setTerminalLogs((prev) => [
         ...prev,
@@ -55,11 +43,10 @@ export default function SignalTerminal() {
         "» Código de respuesta local: 250 OK SECURE.",
         "» Andrés recibirá la señal en sus terminales locales.",
       ]);
-    }, 2800);
+    }, 2800));
   };
 
   const resetTerminal = () => {
-    setFormData({ name: "", email: "", message: "" });
     setStatus("IDLE");
     setTerminalLogs([]);
   };
@@ -109,7 +96,7 @@ export default function SignalTerminal() {
           </div>
         </div>
 
-        <div className="border-t border-white/5 pt-4 mt-6 text-mono text-[9px] text-[#FF0055]/80 flex items-center gap-1.5 font-medium">
+        <div className="border-t border-white/5 pt-4 mt-6 font-mono text-[9px] text-[#FF0055]/80 flex items-center gap-1.5 font-medium">
           <Radio size={12} className="animate-pulse text-[#FF0055]" />
           <span>FIRM: SECURE_COMMS_SOCKET</span>
         </div>
@@ -146,8 +133,6 @@ export default function SignalTerminal() {
                       id="name"
                       type="text"
                       name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
                       placeholder="e.g. INGENIERO_ALFA"
                       disabled={status !== "IDLE"}
                       className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.05] border border-white/10 focus:border-[#00F0FF] outline-none text-white font-mono text-xs py-2.5 pl-7 pr-3 rounded-xs tracking-wider transition-all"
@@ -167,8 +152,6 @@ export default function SignalTerminal() {
                       id="email"
                       type="email"
                       name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
                       placeholder="andres@frecuencia.com"
                       disabled={status !== "IDLE"}
                       className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.05] border border-white/10 focus:border-[#00F0FF] outline-none text-white font-mono text-xs py-2.5 pl-7 pr-3 rounded-xs tracking-wider transition-all"
@@ -188,8 +171,6 @@ export default function SignalTerminal() {
                       id="message"
                       name="message"
                       rows={4}
-                      value={formData.message}
-                      onChange={handleInputChange}
                       placeholder="Escribe tu propuesta o saludo..."
                       disabled={status !== "IDLE"}
                       className="w-full bg-white/[0.02] hover:bg-white/[0.04] focus:bg-white/[0.05] border border-white/10 focus:border-[#00F0FF] outline-none text-white font-mono text-xs py-2.5 pl-7 pr-3 rounded-xs tracking-wider transition-all resize-none min-h-[90px]"
@@ -230,7 +211,7 @@ export default function SignalTerminal() {
                 <h3 className="font-sans text-[#00F0FF] text-lg font-black tracking-wide uppercase">
                   SEÑAL DE COMUNICACIÓN ABIERTA
                 </h3>
-                <p className="font-sans text-xs text-white/80 leading-relaxed max-w-xs mt-2 text-light">
+                <p className="font-sans text-xs text-white/80 leading-relaxed max-w-xs mt-2 font-light">
                   Tu mensaje ha sido cifrado de forma cuántica y enviado al servidor de Andrés. Él volverá a establecer contacto en menos de 24 ciclos localmente.
                 </p>
 
