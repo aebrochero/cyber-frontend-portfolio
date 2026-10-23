@@ -4,7 +4,21 @@
  */
 
 import { motion } from 'motion/react';
-import { Sparkles, Terminal, Coffee, Gamepad2, Feather, ArrowRight, Globe, ExternalLink, Code2 } from 'lucide-react';
+import {
+  Sparkles,
+  Terminal,
+  Coffee,
+  Gamepad2,
+  Feather,
+  ArrowRight,
+  Globe,
+  ExternalLink,
+  Code2,
+  Briefcase,
+  Layers,
+  MapPin,
+  CheckCircle2,
+} from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export type PortfolioThemeKey = 'cyber' | 'cozy' | 'vaporwave' | 'minimal';
@@ -19,291 +33,292 @@ export default function LandingHub({ onSelectTheme }: LandingHubProps) {
   const themesConfig: {
     key: PortfolioThemeKey;
     title: string;
-    subtitle: string;
     badge: string;
-    description: string;
+    summary: string;
     vibe: string;
     icon: typeof Terminal;
-    accentColor: string;
-    gradient: string;
-    border: string;
+    accentBg: string;
+    accentText: string;
+    tagClass: string;
+    cardBorder: string;
     previewBg: string;
-    tags: string[];
+    highlights: string[];
     bgImage: string;
   }[] = [
     {
       key: 'cyber',
-      title: 'Cyber HUD // Spatial Architecture',
-      subtitle: lang === 'es' ? 'Original · Telemetría & Bento Grid' : 'Original · Telemetry & Bento Grid',
-      badge: lang === 'es' ? 'SISTEMA ACTIVO' : 'SYSTEM ACTIVE',
-      description:
+      title: 'Cyber HUD // Spatial Motion',
+      badge: lang === 'es' ? 'Aeroespacial & High-Tech' : 'Aerospace & High-Tech',
+      summary:
         lang === 'es'
-          ? 'Interfaz aeroespacial de grado militar con escaneo láser, cursor interactivo con retícula, telemetría UTC, blueprints SVG animados y tour en nodos.'
-          : 'Military-grade aerospace interface featuring laser scanning, interactive reticle cursor, live UTC telemetry, animated SVG blueprints, and node tour.',
-      vibe: 'Dark Neon · Cyberpunk · High Tech · 60 FPS',
+          ? 'Interfaz futurista de telemetría en tiempo real con Bento Grid, retícula láser, blueprints vectoriales animados y cursor interactivo.'
+          : 'Futuristic telemetry interface featuring Bento Grid architecture, dynamic laser scanline, animated SVG blueprints, and reticle targeting.',
+      vibe: 'Dark Neon · Cyberpunk · 60 FPS',
       icon: Terminal,
-      accentColor: '#00F0FF',
-      gradient: 'from-[#00F0FF]/20 via-[#12141C] to-[#08090C]',
-      border: 'border-[#00F0FF]/40 hover:border-[#00F0FF]',
-      previewBg: 'bg-[#08090C]',
-      tags: ['Bento Grid', 'Cyber Cursor', 'SVG Blueprints', 'Laser Scanline'],
+      accentBg: 'bg-[#00F0FF]',
+      accentText: 'text-[#00F0FF]',
+      tagClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+      cardBorder: 'hover:border-cyan-500/60',
+      previewBg: 'from-cyan-950/40 to-slate-950',
+      highlights: ['Bento Architecture', 'Laser Reticle', 'SVG Blueprints'],
       bgImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
     },
     {
       key: 'cozy',
       title: 'Cozy Developer Studio',
-      subtitle: lang === 'es' ? 'Nuevo · Iluminación Cálida & Plantas' : 'New · Warm Lighting & Plants',
-      badge: lang === 'es' ? 'CÁLIDO & ACCESIBLE' : 'WARM & ACCESSIBLE',
-      description:
+      badge: lang === 'es' ? 'Lo-Fi & Amigable' : 'Lo-Fi & Friendly',
+      summary:
         lang === 'es'
-          ? 'Espacio de trabajo relajante inspirado en estudios creativos. Tonos crema, verde salvia, terracota suave, micro-tarjetas acogedoras, café humeante y lecturas amigables.'
-          : 'Relaxing developer space inspired by creative studio lofts. Cream tones, sage greens, warm terracotta, tactile soft cards, steaming coffee, and friendly typography.',
-      vibe: 'Warm Lo-Fi · Plants · Latte · Human-Centered UI',
+          ? 'Ambiente de trabajo cálido y humano. Inspirado en plantas, café de especialidad, tonos crema y terracota, con tipografía Plus Jakarta Sans.'
+          : 'A warm, human-centered creative workspace. Inspired by indoor plants, specialty coffee, terracotta tones, and tactile soft cards.',
+      vibe: 'Warm Lo-Fi · Plants · Accessible',
       icon: Coffee,
-      accentColor: '#E07A5F',
-      gradient: 'from-[#E07A5F]/20 via-[#FDFBF7] to-[#F4F1DE]',
-      border: 'border-[#E07A5F]/40 hover:border-[#E07A5F]',
-      previewBg: 'bg-[#FDFBF7]',
-      tags: ['Warm Palette', 'Plus Jakarta Sans', 'Plant Accents', 'Tactile Cards'],
+      accentBg: 'bg-[#E07A5F]',
+      accentText: 'text-[#E07A5F]',
+      tagClass: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+      cardBorder: 'hover:border-orange-500/60',
+      previewBg: 'from-orange-950/40 to-stone-950',
+      highlights: ['Plus Jakarta Sans', 'Terracotta Palette', 'Soft Tactile UI'],
       bgImage: 'https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80',
     },
     {
       key: 'vaporwave',
-      title: 'Retro Arcade // Synthwave 80s',
-      subtitle: lang === 'es' ? 'Nuevo · Pixel Neon & CRT Glow' : 'New · Neon Pixel & CRT Glow',
-      badge: lang === 'es' ? 'INSERT COIN // 1984' : 'INSERT COIN // 1984',
-      description:
+      title: 'Retro Arcade // Synthwave',
+      badge: lang === 'es' ? 'Retro Gaming 80s' : '80s Retro Gaming',
+      summary:
         lang === 'es'
-          ? 'Estética nostálgica de arcade de los 80s y synthwave: rejilla en perspectiva, púrpura eléctrico y rosa neón, badges estilo cartucho de consola y sonido visual retro.'
-          : 'Nostalgic 80s arcade and synthwave aesthetics: perspective wireframe grid, electric purple & hot neon pink, cartridge-style badges, and retro gaming vibes.',
-      vibe: 'Synthwave · Neon Magenta · CRT Scan · 8-Bit Glory',
+          ? 'Nostalgia retro de salas arcade y synthwave: rejilla en perspectiva, gradientes neón magenta y cian, badges tipo cartucho y energía 8-bit.'
+          : 'Nostalgic 80s arcade and synthwave aesthetics: wireframe perspective grid, neon magenta gradients, cartridge badges, and 8-bit vibes.',
+      vibe: 'Synthwave · Neon Glow · Arcade Stages',
       icon: Gamepad2,
-      accentColor: '#FF007F',
-      gradient: 'from-[#FF007F]/25 via-[#1A0933] to-[#0A0314]',
-      border: 'border-[#FF007F]/40 hover:border-[#FF007F]',
-      previewBg: 'bg-[#0E041A]',
-      tags: ['CRT Glow', 'Perspective Grid', 'Pixel Accents', 'Vapor Sunset'],
+      accentBg: 'bg-[#FF007F]',
+      accentText: 'text-[#FF007F]',
+      tagClass: 'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20',
+      cardBorder: 'hover:border-fuchsia-500/60',
+      previewBg: 'from-fuchsia-950/40 to-purple-950',
+      highlights: ['Synthwave Grid', 'Arcade Badges', 'Neon Gradients'],
       bgImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
     },
     {
       key: 'minimal',
       title: 'Ultra-Minimalist Ink & Paper',
-      subtitle: lang === 'es' ? 'Nuevo · Tipografía Editorial & Espacio' : 'New · Editorial Typography & Space',
-      badge: lang === 'es' ? 'EDICIÓN IMPRESA' : 'PRINT EDITION',
-      description:
+      badge: lang === 'es' ? 'Editorial Suizo' : 'Swiss Editorial',
+      summary:
         lang === 'es'
-          ? 'Diseño editorial suizo de alta precisión. Fondo papel marfil, tinta carbón profunda, elegantes contrastes en tipografía serif Fraunces, espaciado generoso y pulcritud matemática.'
-          : 'High-end Swiss editorial design. Crisp cream archival paper, deep carbon ink, elegant Fraunces serif typography contrasts, generous whitespace, and mathematical poise.',
-      vibe: 'Swiss Editorial · High Contrast · Fraunces Serif · Pure Poise',
+          ? 'Elegancia editorial con papel marfil, tinta carbón profunda, contrastes en tipografía serif Fraunces, espaciado generoso y pulcritud matemática.'
+          : 'High-end Swiss editorial poise with archival cream paper, deep carbon ink, Fraunces serif typography contrasts, and mathematical discipline.',
+      vibe: 'Swiss Editorial · High Contrast · Serif Poise',
       icon: Feather,
-      accentColor: '#1A1A1A',
-      gradient: 'from-stone-300/40 via-[#FAF9F6] to-stone-100',
-      border: 'border-stone-400/50 hover:border-black',
-      previewBg: 'bg-[#FAF9F6]',
-      tags: ['Editorial Serif', 'Monochrome Ink', 'Generous Whitespace', 'Swiss Precision'],
+      accentBg: 'bg-stone-200',
+      accentText: 'text-stone-200',
+      tagClass: 'bg-stone-500/10 text-stone-300 border-stone-500/20',
+      cardBorder: 'hover:border-stone-400',
+      previewBg: 'from-stone-900/60 to-black',
+      highlights: ['Fraunces Serif', 'Monochrome Poise', 'Generous Whitespace'],
       bgImage: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80',
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#07080B] text-white selection:bg-[#00F0FF] selection:text-black font-sans relative overflow-x-hidden">
-      {/* Background ambient mesh */}
-      <div className="absolute inset-0 pointer-events-none opacity-25">
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#00F0FF]/15 rounded-full blur-[140px]" />
-        <div className="absolute top-1/3 -right-32 w-96 h-96 bg-[#FF0055]/15 rounded-full blur-[160px]" />
-        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-[#E07A5F]/15 rounded-full blur-[150px]" />
-      </div>
+    <div className="min-h-screen bg-[#0B0F17] text-slate-100 font-sans selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
+      {/* Refined clean ambient gradients */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] bg-gradient-to-b from-blue-600/10 via-indigo-600/5 to-transparent pointer-events-none blur-3xl" />
 
-      {/* Subtle Grid Background */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #FFFFFF 1px, transparent 1px),
-            linear-gradient(to bottom, #FFFFFF 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px',
-        }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-14">
-        {/* Top Bar Navigation */}
-        <header className="flex items-center justify-between pb-8 mb-10 border-b border-white/10">
+      {/* Main Container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        {/* Navigation Bar */}
+        <header className="flex items-center justify-between py-4 px-6 mb-12 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-xl shadow-lg">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-sm bg-gradient-to-br from-[#00F0FF]/20 to-white/5 border border-white/15 flex items-center justify-center font-mono font-bold text-lg text-white tracking-widest shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-sm text-white shadow-md shadow-blue-500/20">
               AB
             </div>
             <div>
-              <span className="font-mono text-[10px] text-[#00F0FF] tracking-widest block uppercase">
-                PORTFOLIO ARCHITECTURE LAB
+              <span className="font-semibold text-sm text-white tracking-tight block">
+                {dict.identity.name}
               </span>
-              <h2 className="font-sans text-sm md:text-base font-extrabold tracking-tight text-white">
-                {dict.identity.name} <span className="text-white/40 font-light">╱╱ MULTI-EXPERIENCE STUDIO</span>
-              </h2>
+              <span className="text-xs text-slate-400 font-medium">
+                Frontend & Full Stack Software Engineer
+              </span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Lang toggle */}
+            {/* Lang switch */}
             <button
               onClick={toggleLang}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00F0FF]/50 text-white rounded-xs font-mono text-[11px] tracking-wider transition-all cursor-pointer group"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs font-medium text-slate-300 transition-colors cursor-pointer"
               title={lang === 'es' ? 'Switch to English' : 'Cambiar a Español'}
             >
-              <Globe size={12} className="text-[#00F0FF] group-hover:rotate-45 transition-transform" />
-              <span className={lang === 'es' ? 'text-[#00F0FF] font-bold' : 'text-white/50'}>ES</span>
-              <span className="text-white/30">/</span>
-              <span className={lang === 'en' ? 'text-[#00F0FF] font-bold' : 'text-white/50'}>EN</span>
+              <Globe size={13} className="text-blue-400" />
+              <span>{lang === 'es' ? 'Español' : 'English'}</span>
             </button>
 
+            {/* GitHub Link */}
             <a
               href={dict.identity.contacts.githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/15 text-white/70 hover:text-white rounded-xs font-mono text-[11px] tracking-wider transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-xs font-medium text-slate-300 hover:text-white transition-colors"
             >
-              <Code2 size={12} className="text-[#00F0FF]" />
-              <span>GITHUB</span>
-              <ExternalLink size={10} className="text-white/40" />
+              <Code2 size={13} className="text-slate-400" />
+              <span>GitHub</span>
+              <ExternalLink size={11} className="text-slate-500" />
             </a>
           </div>
         </header>
 
         {/* Hero Section */}
-        <section className="text-center max-w-3xl mx-auto mb-14 md:mb-20">
+        <section className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/70 font-mono text-xs mb-5"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-6 shadow-sm"
           >
-            <Sparkles size={12} className="text-[#00F0FF] animate-pulse" />
+            <Sparkles size={13} />
             <span>
               {lang === 'es'
-                ? '4 Interpretaciones de Diseño · Mismo Código & Contenido'
-                : '4 Design Interpretations · Same Core Code & Data'}
+                ? 'Portfolio Design Studio · 4 Experiencias Visuales'
+                : 'Portfolio Design Studio · 4 Visual Experiences'}
             </span>
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.08] mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.12] mb-6"
           >
             {lang === 'es' ? (
               <>
-                Elige la <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#FF007F] to-[#E07A5F]">experiencia visual</span> para explorar mi trabajo.
+                Un portafolio, <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-teal-300">
+                  cuatro visiones de diseño
+                </span>
               </>
             ) : (
               <>
-                Select your preferred <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00F0FF] via-[#FF007F] to-[#E07A5F]">visual realm</span> to explore my portfolio.
+                One portfolio, <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-teal-300">
+                  four design perspectives
+                </span>
               </>
             )}
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-sm sm:text-base text-white/70 font-light leading-relaxed max-w-2xl mx-auto"
+            transition={{ delay: 0.18 }}
+            className="text-base sm:text-lg text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto mb-8"
           >
             {lang === 'es'
-              ? 'Toda la experiencia profesional, proyectos clave de Betowa/SENA, métricas y stack técnico de Andrés Brochero estructurados en 4 estéticas frontend radicalmente distintas. Cada una cuenta con su propio tour guiado interactivo.'
-              : 'All professional experience, key Betowa/SENA production projects, metrics, and technical stack of Andrés Brochero rendered across 4 radically distinct frontend aesthetics, each equipped with its own interactive onboarding tour.'}
+              ? 'Mismo contenido profesional, proyectos de Betowa (SENA), métricas y experiencia técnica presentados en cuatro estilos frontend únicos y adaptados con tours interactivos.'
+              : 'Same core engineering experience, Betowa (SENA) production platforms, and technical skills presented across four distinctive frontend themes with interactive onboarding tours.'}
           </motion.p>
+
+          {/* Quick Metrics Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="inline-flex flex-wrap items-center justify-center gap-4 sm:gap-8 px-6 py-3 rounded-2xl bg-slate-900/50 border border-slate-800 text-xs text-slate-400"
+          >
+            <div className="flex items-center gap-2">
+              <MapPin size={13} className="text-blue-400" />
+              <span>Pereira, Risaralda // Colombia</span>
+            </div>
+            <div className="hidden sm:block text-slate-700">•</div>
+            <div className="flex items-center gap-2">
+              <Briefcase size={13} className="text-indigo-400" />
+              <span>4+ {lang === 'es' ? 'Años Experiencia' : 'Years Experience'}</span>
+            </div>
+            <div className="hidden sm:block text-slate-700">•</div>
+            <div className="flex items-center gap-2">
+              <Layers size={13} className="text-teal-400" />
+              <span>Next.js · React 19 · TypeScript</span>
+            </div>
+          </motion.div>
         </section>
 
-        {/* 4 Cards Bento Grid */}
+        {/* 4 Cards Showcase */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-16">
           {themesConfig.map((theme, idx) => {
             const Icon = theme.icon;
             return (
               <motion.div
                 key={theme.key}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 + idx * 0.1 }}
-                whileHover={{ y: -5 }}
-                className={`group relative rounded-sm border ${theme.border} bg-[#0E1017] transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-xl cursor-pointer`}
+                transition={{ delay: 0.15 + idx * 0.08 }}
+                whileHover={{ y: -4 }}
                 onClick={() => onSelectTheme(theme.key)}
+                className={`group relative rounded-2xl border border-slate-800/90 ${theme.cardBorder} bg-slate-900/70 hover:bg-slate-900 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-xl shadow-black/40 cursor-pointer`}
               >
-                {/* Visual Header with Unsplash image preview overlay */}
-                <div className="relative h-44 sm:h-52 w-full overflow-hidden border-b border-white/10">
+                {/* Visual Image Header */}
+                <div className="relative h-44 sm:h-48 w-full overflow-hidden">
                   <img
                     src={theme.bgImage}
                     alt={theme.title}
-                    className="w-full h-full object-cover object-center filter brightness-50 contrast-125 group-hover:scale-105 group-hover:brightness-75 transition-all duration-700"
+                    className="w-full h-full object-cover object-center filter brightness-[0.6] contrast-110 group-hover:scale-105 group-hover:brightness-[0.75] transition-all duration-700"
                     loading="lazy"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${theme.gradient} opacity-85 group-hover:opacity-75 transition-opacity`} />
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t ${theme.previewBg} opacity-80 group-hover:opacity-70 transition-opacity`}
+                  />
 
-                  {/* Top floating pill */}
+                  {/* Top Bar with Badge and Icon */}
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                    <span
-                      className="px-2.5 py-1 rounded-xs font-mono text-[9px] font-bold tracking-widest uppercase border backdrop-blur-md"
-                      style={{
-                        backgroundColor: 'rgba(0,0,0,0.6)',
-                        borderColor: theme.accentColor,
-                        color: theme.accentColor,
-                      }}
-                    >
+                    <span className="px-3 py-1 rounded-lg text-xs font-semibold bg-black/60 border border-white/10 text-white backdrop-blur-md">
                       {theme.badge}
                     </span>
 
-                    <div className="w-8 h-8 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white backdrop-blur-md group-hover:rotate-12 transition-transform">
-                      <Icon size={14} style={{ color: theme.accentColor }} />
+                    <div className="w-8 h-8 rounded-lg bg-black/60 border border-white/10 flex items-center justify-center text-white backdrop-blur-md group-hover:rotate-6 transition-transform">
+                      <Icon size={15} />
                     </div>
                   </div>
 
-                  {/* Aesthetic Vibe text bottom */}
+                  {/* Vibe subtitle */}
                   <div className="absolute bottom-3 left-4 right-4">
-                    <span className="font-mono text-[10px] tracking-wider text-white/80 uppercase font-semibold drop-shadow-md">
+                    <span className="text-xs font-medium text-slate-200 drop-shadow">
                       {theme.vibe}
                     </span>
                   </div>
                 </div>
 
-                {/* Card Content Body */}
+                {/* Content Body */}
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <span className="font-mono text-[10px] tracking-wider text-white/40 uppercase block mb-1">
-                      {theme.subtitle}
-                    </span>
-                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mb-3 group-hover:text-white transition-colors">
+                    <h3 className="text-xl font-bold text-white tracking-tight mb-2 group-hover:text-blue-300 transition-colors">
                       {theme.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-white/70 font-light leading-relaxed mb-5">
-                      {theme.description}
+                    <p className="text-sm text-slate-400 leading-relaxed font-normal mb-5">
+                      {theme.summary}
                     </p>
                   </div>
 
-                  {/* Feature Tags */}
                   <div>
-                    <div className="flex flex-wrap gap-1.5 mb-6">
-                      {theme.tags.map((tag, tIdx) => (
+                    {/* Highlights */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {theme.highlights.map((item, hIdx) => (
                         <span
-                          key={tIdx}
-                          className="px-2 py-0.5 rounded-xs bg-white/5 border border-white/10 text-white/60 font-mono text-[9px]"
+                          key={hIdx}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700/60 text-xs text-slate-300 font-medium"
                         >
-                          {tag}
+                          <CheckCircle2 size={11} className="text-emerald-400" />
+                          <span>{item}</span>
                         </span>
                       ))}
                     </div>
 
-                    {/* Launch Action Button */}
-                    <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                      <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest">
-                        {lang === 'es' ? 'CLICK PARA ENTRAR' : 'CLICK TO LAUNCH'}
+                    {/* Button footer */}
+                    <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                      <span className="text-xs font-medium text-slate-500">
+                        {lang === 'es' ? 'Recorrido guiado incluido' : 'Guided tour included'}
                       </span>
-                      <button
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xs font-mono text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-lg group-hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-                        style={{
-                          backgroundColor: theme.accentColor,
-                          color: theme.key === 'minimal' ? '#FFFFFF' : '#000000',
-                        }}
-                      >
-                        <span>{lang === 'es' ? 'Explorar Portafolio' : 'Enter Portfolio'}</span>
-                        <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+
+                      <button className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 group-hover:bg-blue-600 text-white text-xs font-semibold transition-all duration-200 shadow-sm">
+                        <span>{lang === 'es' ? 'Ver Portafolio' : 'View Portfolio'}</span>
+                        <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                       </button>
                     </div>
                   </div>
@@ -313,16 +328,84 @@ export default function LandingHub({ onSelectTheme }: LandingHubProps) {
           })}
         </div>
 
-        {/* Footer info */}
-        <footer className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[10px] text-white/40">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>
-              {dict.identity.name} — {dict.identity.roleTitle}
-            </span>
+        {/* Professional Profile Summary Accordion/Card */}
+        <section className="rounded-2xl border border-slate-800/90 bg-slate-900/50 p-6 sm:p-8 mb-12">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-blue-400 block mb-1">
+                {lang === 'es' ? 'Perfil del Ingeniero' : 'Engineer Profile'}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
+                {dict.identity.name}
+              </h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300 font-medium">
+              <a
+                href={`mailto:${dict.identity.contacts.primaryEmail}`}
+                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+              >
+                {dict.identity.contacts.primaryEmail}
+              </a>
+              <a
+                href={dict.identity.contacts.linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1.5 rounded-lg bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 transition-colors"
+              >
+                LinkedIn
+              </a>
+              <a
+                href={dict.identity.contacts.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 text-sm text-slate-400">
+            <div>
+              <h4 className="font-semibold text-slate-200 mb-2">
+                {lang === 'es' ? 'Experiencia Clave' : 'Key Experience'}
+              </h4>
+              <p className="leading-relaxed text-xs">
+                {lang === 'es'
+                  ? 'Frontend Developer en el ecosistema Betowa (SENA / Sofia Plus), liderando aplicaciones web de alta concurrencia como Oferta Sofia Plus, Admin Betowa y Selección Betowa.'
+                  : 'Frontend Developer in the Betowa ecosystem (SENA / Sofia Plus), building mission-critical platforms like Oferta Sofia Plus, Admin Betowa, and Selección Betowa.'}
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-slate-200 mb-2">
+                {lang === 'es' ? 'Enfoque Técnico' : 'Technical Focus'}
+              </h4>
+              <p className="leading-relaxed text-xs">
+                {lang === 'es'
+                  ? 'Arquitectura modular en Next.js (App Router, Server Actions), React 19, TypeScript estricto, Tailwind CSS y pruebas automatizadas E2E con Playwright.'
+                  : 'Modular architecture with Next.js (App Router, Server Actions), React 19, strict TypeScript, Tailwind CSS, and E2E automated testing via Playwright.'}
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-slate-200 mb-2">
+                {lang === 'es' ? 'Disponibilidad' : 'Availability'}
+              </h4>
+              <p className="leading-relaxed text-xs">
+                {lang === 'es'
+                  ? 'Disponible para posiciones presenciales, híbridas o en remoto (Pereira, Colombia // UTC-05). Abierto a nuevos desafíos de ingeniería.'
+                  : 'Available for on-site, hybrid, or remote positions (Pereira, Colombia // UTC-05). Open to impactful software engineering challenges.'}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div>
+            <span>© {new Date().getFullYear()} {dict.identity.name}. {lang === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}</span>
           </div>
           <div>
-            <span>REACT 19 · VITE 6 · TAILWIND v4 · MOTION · DRIVER.JS</span>
+            <span>React 19 · Vite 6 · Tailwind CSS v4 · TypeScript</span>
           </div>
         </footer>
       </div>
